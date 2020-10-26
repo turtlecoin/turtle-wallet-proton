@@ -5,6 +5,8 @@ import crypto from 'crypto';
 import React, { Component } from 'react';
 import QRCode from 'qrcode.react';
 import ReactTooltip from 'react-tooltip';
+import Configure from '../../Configure';
+
 import {
   createIntegratedAddress,
   validatePaymentID
@@ -69,7 +71,8 @@ export default class Receive extends Component<Props, State> {
     const paymentID = specifiedID || crypto.randomBytes(32).toString('hex');
     const integratedAddress = createIntegratedAddress(
       session.getPrimaryAddress(),
-      paymentID
+      paymentID,
+	  Configure
     );
     this.setState({
       masterSwitch: true,

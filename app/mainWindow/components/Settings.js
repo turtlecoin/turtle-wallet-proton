@@ -20,6 +20,7 @@ import Rescanner from './Rescanner';
 import DarkModeToggle from './DarkModeToggle';
 import CloseToTrayToggle from './CloseToTrayToggle';
 import ScanCoinbaseToggle from './ScanCoinbaseToggle';
+import AutoOptimizationToggle from './AutoOptimizationToggle';
 import NotificationsToggle from './NotificationsToggle';
 
 type Props = {};
@@ -311,6 +312,8 @@ export default class Settings extends Component<Props, State> {
                     <br />
                     <ScanCoinbaseToggle darkMode={darkMode} />
                     <br />
+                    <AutoOptimizationToggle darkMode={darkMode} />
+                    <br />
                     <LogLevelSelector darkMode={darkMode} />
                     <br />
                     <button
@@ -391,6 +394,8 @@ export default class Settings extends Component<Props, State> {
                       <Rescanner darkMode={darkMode} />
                       <br />
                       <ScanCoinbaseToggle darkMode={darkMode} />
+                      <br />
+                      <AutoOptimizationToggle darkMode={darkMode} />
                     </div>
                   )}
                   {previousTab === 'display' && masterSwitch && (

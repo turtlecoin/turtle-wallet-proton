@@ -24,6 +24,7 @@ import BottomBar from './BottomBar';
 import Redirector from './Redirector';
 import { uiType, atomicToHuman, search } from '../utils/utils';
 import donateInfo from '../constants/donateInfo.json';
+import Configure from '../../Configure';
 
 type Props = {
   uriAddress?: string,
@@ -231,7 +232,12 @@ export default class Send extends Component<Props, State> {
     if (messageType === 'prepareTransactionResponse') {
       eventEmitter.emit('transactionCancel');
       if (data.status === 'SUCCESS') {
+        let networkHeight = session.getNetworkBlockHeight();
+        let txFee = Configure.minimumFee;
         const { address, paymentID, amount, fee, nodeFee, hash } = data;
+        if (networkHeight >= Configure.feePerByteHeight) {
+          txFee = fee;
+        }
         session.setPreparedTransactionHash(hash);
         const modalMessage = (
           <div>
@@ -247,17 +253,17 @@ export default class Send extends Component<Props, State> {
             <p className={`subtitle ${textColor}`}>
               <b>Total Amount: (includes fees)</b>
               <br />
-              {atomicToHuman(amount + nodeFee + fee, true)} TRTL
+              {atomicToHuman(amount + nodeFee + txFee, true)} {Configure.ticker}
             </p>
             <p className={`subtitle ${textColor}`}>
               <b>Fee:</b>
               <br />
-              {atomicToHuman(nodeFee + fee, true)} TRTL
+              {atomicToHuman(nodeFee + txFee, true)} {Configure.ticker}
               {nodeFee > 0 &&
                 ` (including a node fee of ${atomicToHuman(
                   nodeFee,
                   true
-                )} TRTL)`}
+                )} ${Configure.ticker})`}
             </p>{' '}
             {paymentID !== '' && (
               <p className={`subtitle ${textColor}`}>
@@ -303,12 +309,12 @@ export default class Send extends Component<Props, State> {
 
     const sufficientFunds = sendAll
       ? true
-      : (session.getUnlockedBalance() + session.getLockedBalance()) / 100 >=
+      : (session.getUnlockedBalance() + session.getLockedBalance()) / (10 ** Configure.decimalPlaces) >=
         Number(enteredAmount);
 
     const sufficientUnlockedFunds = sendAll
       ? true
-      : session.getUnlockedBalance() > Number(enteredAmount) / 100;
+      : session.getUnlockedBalance() > Number(enteredAmount) / (10 ** Configure.decimalPlaces);
 
     if (!sendAll && (sendToAddress === '' || enteredAmount === '')) {
       return;
@@ -357,9 +363,9 @@ export default class Send extends Component<Props, State> {
     const transactionData = {
       address: sendToAddress,
       amount:
-        displayCurrency === 'TRTL'
-          ? Number(enteredAmount) * 100
-          : parseInt((Number(enteredAmount) * 100) / fiatPrice, 10),
+        displayCurrency === Configure.ticker
+          ? Number(enteredAmount) * (10 ** Configure.decimalPlaces)
+          : parseInt((Number(enteredAmount) * (10 ** Configure.decimalPlaces)) / fiatPrice, 10),
       paymentID,
       sendAll
     };
@@ -380,7 +386,7 @@ export default class Send extends Component<Props, State> {
 
     await this.setState({
       selectedContact: { label: sendToAddress, value: sendToAddress },
-      enteredAmount: String(amount / 100),
+      enteredAmount: String(amount / (10 ** Configure.decimalPlaces)),
       sendToAddress,
       paymentID,
       sendAll: false
@@ -416,14 +422,14 @@ export default class Send extends Component<Props, State> {
     const { unlockedBalance, fiatPrice, displayCurrency, nodeFee } = this.state;
 
     const totalAmount =
-      unlockedBalance - 10 - parseInt(nodeFee, 10) <= 0 ? 0 : unlockedBalance;
+      unlockedBalance - parseInt(nodeFee, 10) <= 0 ? 0 : unlockedBalance;
     const enteredAmount =
-      unlockedBalance - 10 - parseInt(nodeFee, 10) <= 0
+      unlockedBalance - parseInt(nodeFee, 10) <= 0
         ? 0
-        : totalAmount - 10 - parseInt(nodeFee, 10);
+        : totalAmount - parseInt(nodeFee, 10);
     this.setState({
       enteredAmount:
-        displayCurrency === 'TRTL'
+        displayCurrency === Configure.ticker
           ? atomicToHuman(enteredAmount, false).toString()
           : atomicToHuman(enteredAmount * fiatPrice, false).toString()
     });
@@ -580,7 +586,7 @@ export default class Send extends Component<Props, State> {
                           : `How much to send (eg. ${
                               displayCurrency === 'fiat'
                                 ? exampleAmount
-                                : '100 TRTL'
+                                : '1000 ' + Configure.ticker
                             })`
                       }
                       value={enteredAmount}

@@ -12,6 +12,11 @@ import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import { createObjectCsvWriter } from 'csv-writer';
 import { atomicToHuman, convertTimestamp } from '../mainWindow/utils/utils';
+import Configure from '../Configure';
+
+export function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export default class Backend {
   notifications: boolean;
@@ -26,7 +31,7 @@ export default class Backend {
 
   walletPassword: string = '';
 
-  wallet: WalletBackend;
+  wallet: any;
 
   walletActive: boolean = false;
 
@@ -126,7 +131,7 @@ export default class Backend {
     const rawTransactions = this.getFormattedTransactions(
       undefined,
       undefined,
-      false
+      true
     );
     const csvWriter = createObjectCsvWriter({
       path: savePath,
@@ -156,14 +161,21 @@ export default class Backend {
     this.wallet.scanCoinbaseTransactions(value);
   }
 
-  async sendTransaction(hash: string): Promise<void> {
+  setenableAutoOptimization(value: boolean) {
+    this.wallet.enableAutoOptimization(value);
+  }
+
+  async sendTransaction(hash: string): void {
+    /* Wait for UI to load before blocking thread */
+    await delay(500);
+
     const result = await this.wallet.sendPreparedTransaction(hash);
 
     if (result.success) {
       console.log(
         `Sent transaction, hash ${
           result.transactionHash
-        }, fee ${prettyPrintAmount(result.fee)}`
+        }, fee ${prettyPrintAmount(result.fee, Configure)}`
       );
       const response = {
         status: 'SUCCESS',
@@ -171,8 +183,10 @@ export default class Backend {
         error: undefined
       };
       this.send('sendTransactionResponse', response);
-      this.getTransactions(this.getLastTxAmountRequested() + 1);
+      await this.getTransactions(this.getLastTxAmountRequested() + 1);
     } else {
+      /* TODO: Optionally allow retries in case of network error? */
+      this.wallet.deletePreparedTransaction(hash);
       console.log(`Failed to send transaction: ${result.error.toString()}`);
       result.error.errorString = result.error.toString();
       const response = {
@@ -185,14 +199,34 @@ export default class Backend {
   }
 
   async prepareTransaction(transaction): Promise<void> {
+    const [unlockedBalance, lockedBalance] = await this.wallet.getBalance();
+
+    const networkHeight: number = this.daemon.getNetworkBlockCount();
+
+    const [feeAddress, nodeFee] = this.wallet.getNodeFee();
+
+    let txFee = Configure.minimumFee;
+
     const { address, amount, paymentID, sendAll } = transaction;
 
-    const destinations = [[address, sendAll ? 100000 : amount]];
+    const payments = [];
+
+    if (sendAll) {
+        payments.push([
+            address,
+            (networkHeight >= Configure.feePerByteHeight) ? 1 : (unlockedBalance - nodeFee - txFee), /* Amount does not matter for sendAll destination */
+        ]);
+    } else {
+        payments.push([
+            address,
+            amount,
+        ]);
+    }
 
     const result = await this.wallet.sendTransactionAdvanced(
-      destinations, // destinations
+      payments, // destinations
       undefined, // mixin
-      undefined, // fee
+      (networkHeight >= Configure.feePerByteHeight) ? undefined : {isFixedFee: true, fixedFee: txFee}, // fee
       paymentID, // paymentID
       undefined, // subwalletsToTakeFrom
       undefined, // changeAddress
@@ -203,20 +237,37 @@ export default class Backend {
     log.info(result);
 
     if (result.success) {
-      const [unlockedBalance, lockedBalance] = await this.wallet.getBalance();
-      const balance = parseInt(unlockedBalance + lockedBalance, 10);
+      let actualAmount = amount;
+
+      if (networkHeight >= Configure.feePerByteHeight) {
+        txFee = result.fee;
+      }
+
+      if (sendAll) {
+        let transactionSum = 0;
+
+        /* We could just get the sum by calling getBalance.. but it's
+        * possibly just changed. Safest to iterate over prepared
+        * transaction and calculate it. */
+        for (const input of result.preparedTransaction.inputs) {
+          transactionSum += input.input.amount;
+        }
+        actualAmount = transactionSum
+                     - txFee
+                     - nodeFee;
+      }
       const response = {
         status: 'SUCCESS',
         hash: result.transactionHash,
         address,
         paymentID,
-        amount: sendAll ? balance : amount,
-        fee: result.fee,
-        nodeFee: this.wallet.getNodeFee()[1],
+        amount: actualAmount,
+        fee: txFee,
+        nodeFee: nodeFee,
         error: undefined
       };
       this.send('prepareTransactionResponse', response);
-      this.getTransactions(this.getLastTxAmountRequested() + 1);
+      await this.getTransactions(this.getLastTxAmountRequested() + 1);
     } else {
       console.log(`Failed to send transaction: ${result.error.toString()}`);
       result.error.errorString = result.error.toString();
@@ -226,8 +277,8 @@ export default class Backend {
         address,
         paymentID,
         amount,
-        fee: result.fee,
-        nodeFee: this.wallet.getNodeFee()[1],
+        fee: txFee,
+        nodeFee: nodeFee,
         error: result.error
       };
       this.send('prepareTransactionResponse', response);
@@ -265,7 +316,7 @@ export default class Backend {
     startIndex?: number,
     numTransactions?: number,
     includeFusions?: boolean
-  ): Promise<any[]> {
+  ): any[] {
     const rawTransactions = await this.wallet.getTransactions(
       startIndex,
       numTransactions,
@@ -292,30 +343,33 @@ export default class Backend {
     return transactions;
   }
 
-  async stop(isShuttingDown: boolean) {
+  stop(isShuttingDown: boolean) {
     if (this.wallet) {
-      await this.saveWallet(false);
+      this.saveWallet(false);
       clearInterval(this.saveInterval);
-      await this.wallet.stop();
+      this.wallet.stop();
     }
     if (isShuttingDown) {
       ipcRenderer.send('backendStopped');
     }
   }
 
-  async getTransactions(displayCount: number): Promise<void> {
+  async getTransactions(displayCount: number): void {
     this.setLastTxAmountRequested(displayCount);
-    const txList = await this.getFormattedTransactions(0, displayCount, false);
-    this.send('transactionList', txList);
+    const get_tx = await this.getFormattedTransactions(0, displayCount, true);
+    this.send(
+      'transactionList',
+      get_tx
+    );
   }
 
   getTransactionCount(): void {
     this.send('transactionCount', this.transactionCount);
   }
 
-  async getBalance(): Promise<void> {
-    const bal = this.wallet.getBalance();
-    this.send('balance', bal);
+  async getBalance(): void {
+    console.log(`balance: ${this.wallet.getBalance()}`);
+    this.send('balance', await this.wallet.getBalance());
   }
 
   saveWallet(notify: boolean, path?: string): boolean {
@@ -378,7 +432,7 @@ export default class Backend {
     return resultsToReturn;
   }
 
-  async changeNode(nodeInfo: any): Promise<void> {
+  async changeNode(nodeInfo: any): void {
     const { host, port } = nodeInfo;
     this.setDaemon(new Daemon(host, port));
     await this.wallet.swapNode(this.daemon);
@@ -400,20 +454,22 @@ export default class Backend {
     this.setLogLevel(this.logLevel);
     this.wallet.on(
       'heightchange',
-      (walletBlockCount, localDaemonBlockCount, networkBlockCount) => {
-        log.info('booba');
-        log.info(this.wallet.getSyncStatus());
+      async (walletBlockCount, localDaemonBlockCount, networkBlockCount) => {
         this.send('syncStatus', [
           walletBlockCount,
           localDaemonBlockCount,
           networkBlockCount
         ]);
+        if (networkBlockCount !== 0 && walletBlockCount !== 0 && (networkBlockCount - walletBlockCount) < 40) {
+            this.send('balance', await this.wallet.getBalance());
+        }
       }
     );
-    this.wallet.on('transaction', () => {
+
+    this.wallet.on('transaction', async () => {
       this.getTransactionCount();
-      this.getTransactions(this.getLastTxAmountRequested() + 1);
-      this.getBalance();
+      await this.getTransactions(this.getLastTxAmountRequested() + 1);
+      await this.getBalance();
     });
 
     this.wallet.on('incomingtx', transaction => {
@@ -423,18 +479,16 @@ export default class Backend {
           body: `You've just received ${atomicToHuman(
             transaction.totalAmount(),
             true
-          )} TRTL.`
+          )} {Configure.ticker}.`
         });
       }
     });
     this.setWalletActive(true);
     this.send('syncStatus', this.wallet.getSyncStatus());
     this.send('primaryAddress', this.wallet.getPrimaryAddress());
-    const txList = await this.getFormattedTransactions(0, 50, false);
-    this.send('transactionList', txList);
+    this.send('transactionList', await this.getFormattedTransactions(0, 50, true));
     this.getTransactionCount();
-    const bal = await this.wallet.getBalance();
-    this.send('balance', bal);
+    this.send('balance', await this.wallet.getBalance());
     this.send('walletActiveStatus', true);
     this.send('authenticationStatus', true);
     await this.wallet.start();
@@ -442,21 +496,27 @@ export default class Backend {
     this.getNodeFee();
   }
 
-  async getSecret(): Promise<string> {
+  async getMnemonic(): string {
+      let [mnemonicSeed, err] = await this.wallet.getMnemonicSeed();
+      if (err) {
+        if (err.errorCode === 41) {
+          mnemonicSeed = '';
+        } else {
+          throw err;
+        }
+      }
+      return mnemonicSeed;
+  }
+
+  async getSecret(): string {
     const publicAddress = this.wallet.getPrimaryAddress();
     const [
       privateSpendKey,
       privateViewKey
     ] = this.wallet.getPrimaryAddressPrivateKeys();
     // eslint-disable-next-line prefer-const
-    let [mnemonicSeed, err] = await this.wallet.getMnemonicSeed();
-    if (err) {
-      if (err.errorCode === 41) {
-        mnemonicSeed = '';
-      } else {
-        throw err;
-      }
-    }
+
+    let mnemonicSeed = await this.getMnemonic();
 
     const secret =
       // eslint-disable-next-line prefer-template
@@ -477,10 +537,11 @@ export default class Backend {
     const [openWallet, error] = await WalletBackend.openWalletFromFile(
       this.daemon,
       this.walletFile,
-      this.walletPassword
+      this.walletPassword,
+      Configure
     );
     if (!error) {
-      await this.walletInit(openWallet);
+      this.walletInit(openWallet);
     } else if (error.errorCode === WalletErrorCode.WRONG_PASSWORD) {
       this.send('authenticationStatus', false);
     } else {

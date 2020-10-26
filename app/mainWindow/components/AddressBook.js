@@ -8,13 +8,14 @@ import jdenticon from 'jdenticon';
 import {
   validateAddress,
   validatePaymentID
-} from 'turtlecoin-wallet-backend/dist/lib/ValidateParameters';
+} from 'turtlecoin-wallet-backend';
 import NavBar from './NavBar';
 import BottomBar from './BottomBar';
 import Redirector from './Redirector';
 import { uiType } from '../utils/utils';
 import { addressList, directories, loginCounter, config } from '../index';
 import routes from '../constants/routes';
+import Configure from '../../Configure';
 
 type State = {
   darkMode: boolean,
@@ -147,7 +148,7 @@ class AddressBook extends Component<Props, State> {
     let badAddress = false;
     let badPaymentID = false;
 
-    if (!validateAddress(newAddress, true)) {
+    if (!validateAddress(newAddress, true, Configure)) {
       badAddress = true;
     } else {
       badAddress = false;

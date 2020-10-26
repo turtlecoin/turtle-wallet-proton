@@ -428,7 +428,7 @@ ipcRenderer.on('handleSaveAs', async () => {
 
   log.info(response);
 
-  const request = { notify: true, savePath: `${response.filePath}.wallet` };
+  const request = { notify: true, savePath: `${response.filePath}` };
   ipcRenderer.send('fromFrontend', 'saveWalletAs', request);
 });
 
@@ -473,17 +473,17 @@ eventEmitter.on('handleOpen', handleOpen);
 
 function handleAbout() {
   remote.shell.openExternal(
-    'http://github.com/turtlecoin/turtle-wallet-proton#readme'
+    `${Configure.GitHubRepo}/issues#readme`
   );
 }
 
 function handleHelp() {
-  remote.shell.openExternal('https://discord.gg/P7urHQs');
+  remote.shell.openExternal(`${Configure.DiscordURL}`)
 }
 
 function handleIssues() {
   remote.shell.openExternal(
-    'https://github.com/turtlecoin/turtle-wallet-proton/issues'
+    `${Configure.GitHubRepo}/issues`
   );
 }
 

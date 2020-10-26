@@ -7,7 +7,7 @@ import isDev from 'electron-is-dev';
 import log from 'electron-log';
 import Backend from './Backend';
 
-let backend: Backend | null = null;
+let backend = null;
 
 ipcRenderer.on('fromMain', (event: IpcRendererEvent, message: any) => {
   parseMessage(message);
@@ -34,13 +34,13 @@ async function parseMessage(message: any) {
       break;
     case 'stopRequest':
       if (backend) {
-        await backend.stop(true);
+        backend.stop(true);
       } else {
         ipcRenderer.send('backendStopped');
       }
       break;
     case 'transactionSearchQuery':
-      await backend.transactionSearch(data);
+      backend.transactionSearch(data);
       break;
     case 'notificationsRequest':
       backend.setNotifications(data);
@@ -51,21 +51,26 @@ async function parseMessage(message: any) {
     case 'scanCoinbaseRequest':
       backend.setScanCoinbaseTransactions(data);
       break;
+    case 'AutoOptimizationRequest':
+      backend.setenableAutoOptimization(data);
+      break;
     case 'rescanRequest':
-      await backend.rescanWallet(data);
+      backend.rescanWallet(data);
       break;
     case 'changeNode':
-      await backend.changeNode(data);
+      backend.changeNode(data);
       break;
     case 'backupToFile':
-      fs.writeFile(data, backend.getSecret(), error => {
+      const key_file = await backend.getSecret();
+      fs.writeFile(data, key_file, error => {
         if (error) {
           throw error;
         }
       });
       break;
     case 'backupToClipboard':
-      clipboard.writeText(backend.getSecret());
+      const keys = await backend.getSecret();
+      clipboard.writeText(keys);
       break;
     case 'exportToCSV':
       backend.exportToCSV(data);
@@ -78,12 +83,12 @@ async function parseMessage(message: any) {
       break;
     case 'openNewWallet':
       if (backend) {
-        await backend.stop(false);
+        backend.stop(false);
         backend = null;
       }
       break;
     case 'walletPassword':
-      await backend.startWallet(data);
+      backend.startWallet(data);
       break;
     case 'verifyWalletPassword':
       backend.verifyPassword(data);
@@ -93,13 +98,13 @@ async function parseMessage(message: any) {
       break;
     case 'transactionRequest':
       // data is the amount of transactions to get
-      await backend.getTransactions(data);
+      backend.getTransactions(data);
       break;
     case 'prepareTransactionRequest':
-      await backend.prepareTransaction(data);
+      backend.prepareTransaction(data);
       break;
     case 'sendTransactionRequest':
-      await backend.sendTransaction(data);
+      backend.sendTransaction(data);
       break;
     default:
       log.info(`UNSUPPORTED: ${message}`);

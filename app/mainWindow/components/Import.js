@@ -11,6 +11,7 @@ import BottomBar from './BottomBar';
 import Redirector from './Redirector';
 import { uiType } from '../utils/utils';
 import { eventEmitter, reInitWallet, config } from '../index';
+import Configure from '../../Configure';
 
 type State = {
   darkMode: boolean,
@@ -129,10 +130,11 @@ export default class Import extends Component<Props, State> {
     let currentPageNumber: number = this.evaluatePageNumber(activePage);
 
     if (currentPageNumber === 1) {
-      const [restoredWallet, error] = WalletBackend.importWalletFromSeed(
-        new Daemon('blockapi.turtlepay.io', 443),
+      const [restoredWallet, error] = await WalletBackend.importWalletFromSeed(
+        Configure.defaultDaemon,
         scanHeight === '' ? 0 : Number(scanHeight),
-        mnemonicSeed
+        mnemonicSeed,
+        Configure
       );
 
       if (error) {
@@ -175,11 +177,11 @@ export default class Import extends Component<Props, State> {
       }
 
       const saved = importedWallet.saveWalletToFile(
-        `${response.filePath}.wallet`,
+        `${response.filePath}`,
         password
       );
       if (saved) {
-        reInitWallet(`${response.filePath}.wallet`);
+        reInitWallet(`${response.filePath}`);
       } else {
         const message = (
           <div>
