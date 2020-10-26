@@ -72,7 +72,7 @@ export default class Receive extends Component<Props, State> {
     const integratedAddress = createIntegratedAddress(
       session.getPrimaryAddress(),
       paymentID,
-	  Configure
+      Configure
     );
     this.setState({
       masterSwitch: true,

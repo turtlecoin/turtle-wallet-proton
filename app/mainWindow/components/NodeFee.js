@@ -26,7 +26,11 @@ export default class NodeFee extends Component<Props, State> {
     super(props);
     this.state = {
       nodeFee: session.getNodeFee() || 0,
-      connectednode: (session.getDaemonConnectionInfo()) ? (session.getDaemonConnectionInfo().host + ':' + session.getDaemonConnectionInfo().port): 'Connecting, please wait...'
+      connectednode: session.getDaemonConnectionInfo()
+        ? session.getDaemonConnectionInfo().host +
+          ':' +
+          session.getDaemonConnectionInfo().port
+        : 'Connecting, please wait...'
     };
     this.handleNewNodeFee = this.handleNewNodeFee.bind(this);
   }
@@ -42,7 +46,11 @@ export default class NodeFee extends Component<Props, State> {
   handleNewNodeFee = () => {
     this.setState({
       nodeFee: session.getNodeFee(),
-      connectednode: (session.getDaemonConnectionInfo()) ? (session.getDaemonConnectionInfo().host + ':' + session.getDaemonConnectionInfo().port): 'Connecting, please wait...'
+      connectednode: session.getDaemonConnectionInfo()
+        ? session.getDaemonConnectionInfo().host +
+          ':' +
+          session.getDaemonConnectionInfo().port
+        : 'Connecting, please wait...'
     });
   };
 
@@ -55,9 +63,8 @@ export default class NodeFee extends Component<Props, State> {
       return (
         <div className="control statusicons">
           <div className="tags has-addons">
-            <span className={`tag is-success ${size}`}>{connectednode}</span>
             <span className={`tag ${color} ${size}`}>{il8n.node_fee}</span>
-            <span className={`tag is-danger ${size}`}>
+            <span data-tip={connectednode} className={`tag is-danger ${size}`}>
               {atomicToHuman(nodeFee, true)} {Configure.ticker}
             </span>
           </div>

@@ -5,10 +5,7 @@ import fs from 'fs';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import jdenticon from 'jdenticon';
-import {
-  validateAddress,
-  validatePaymentID
-} from 'turtlecoin-wallet-backend';
+import { validateAddress, validatePaymentID } from 'turtlecoin-wallet-backend';
 import NavBar from './NavBar';
 import BottomBar from './BottomBar';
 import Redirector from './Redirector';

@@ -120,7 +120,9 @@ export default class Home extends Component<Props, State> {
     const hash = event.target.value;
 
     remote.shell.openExternal(
-      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(hash)}`
+      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(
+        hash
+      )}`
     );
   };
 
@@ -143,14 +145,22 @@ export default class Home extends Component<Props, State> {
   refreshListOnNewTransaction = async () => {
     log.debug('Transaction found, refreshing transaction list...');
     displayedTransactionCount += 1;
-    const get_tx = await session.getTransactions(0, displayedTransactionCount, false);
+    const get_tx = await session.getTransactions(
+      0,
+      displayedTransactionCount,
+      false
+    );
     this.setState({ transactions: get_tx });
   };
 
   openNewWallet = async () => {
     log.debug('Initialized new wallet session, refreshing transaction list...');
     displayedTransactionCount = 50;
-    const get_tx = await session.getTransactions(0, displayedTransactionCount, false);
+    const get_tx = await session.getTransactions(
+      0,
+      displayedTransactionCount,
+      false
+    );
     this.setState({ transactions: get_tx });
   };
 
@@ -244,177 +254,183 @@ export default class Home extends Component<Props, State> {
                 </tr>
               </thead>
               <tbody>
-                {transactions !== undefined && transactions.length > 0 && transactions.map(tx => {
-                  const rowIsExpanded = expandedRows.includes(tx[1]);
-                  const transactionHash = tx[1];
-                  const toggleSymbol = rowIsExpanded ? '-' : '+';
-                  return (
-                    <Fragment key={transactionHash}>
-                      <tr>
-                        <td>
-                          <button
-                            value={transactionHash}
-                            onClick={this.expandRow}
-                            className={`transparent-button ${textColor}`}
-                            onMouseDown={event => event.preventDefault()}
-                          >
-                            {toggleSymbol}
-                          </button>
-                        </td>
-                        <td>
-                          {tx[0] === 0 && (
-                            <p className="has-text-danger">
-                              {il8n.unconfirmed}
-                            </p>
-                          )}
-                          {tx[0] > 0 && <p>{convertTimestamp(tx[0])}</p>}
-                        </td>
-                        <td>{tx[1]}</td>
-                        {tx[2] < 0 && (
+                {transactions !== undefined &&
+                  transactions.length > 0 &&
+                  transactions.map(tx => {
+                    const rowIsExpanded = expandedRows.includes(tx[1]);
+                    const transactionHash = tx[1];
+                    const toggleSymbol = rowIsExpanded ? '-' : '+';
+                    return (
+                      <Fragment key={transactionHash}>
+                        <tr>
                           <td>
-                            <p className="has-text-danger has-text-right">
-                              {displayCurrency === Configure.ticker &&
-                                atomicToHuman(tx[2], true)}
-                              {displayCurrency === 'fiat' &&
-                                symbolLocation === 'prefix' &&
-                                fiatPrice !== 0 &&
-                                `-${fiatSymbol}${formatLikeCurrency(
-                                  (
-                                    fiatPrice * atomicToHuman(tx[2], false)
-                                  ).toFixed(fiatDecimals)
-                                ).substring(1)}`}
-                              {displayCurrency === 'fiat' &&
-                                symbolLocation === 'suffix' &&
-                                fiatPrice !== 0 &&
-                                `-${formatLikeCurrency(
-                                  (
-                                    fiatPrice * atomicToHuman(tx[2], false)
-                                  ).toFixed(2)
-                                ).substring(1)}${fiatSymbol}`}
-                              {displayCurrency === 'fiat' &&
-                                fiatPrice === 0 &&
-                                ''}
-                            </p>
+                            <button
+                              value={transactionHash}
+                              onClick={this.expandRow}
+                              className={`transparent-button ${textColor}`}
+                              onMouseDown={event => event.preventDefault()}
+                            >
+                              {toggleSymbol}
+                            </button>
                           </td>
-                        )}
-                        {tx[2] > 0 && (
+                          <td>
+                            {tx[0] === 0 && (
+                              <p className="has-text-danger">
+                                {il8n.unconfirmed}
+                              </p>
+                            )}
+                            {tx[0] > 0 && <p>{convertTimestamp(tx[0])}</p>}
+                          </td>
+                          <td>{tx[1]}</td>
+                          {tx[2] < 0 && (
+                            <td>
+                              <p className="has-text-danger has-text-right">
+                                {displayCurrency === Configure.ticker &&
+                                  atomicToHuman(tx[2], true)}
+                                {displayCurrency === 'fiat' &&
+                                  symbolLocation === 'prefix' &&
+                                  fiatPrice !== 0 &&
+                                  `-${fiatSymbol}${formatLikeCurrency(
+                                    (
+                                      fiatPrice * atomicToHuman(tx[2], false)
+                                    ).toFixed(fiatDecimals)
+                                  ).substring(1)}`}
+                                {displayCurrency === 'fiat' &&
+                                  symbolLocation === 'suffix' &&
+                                  fiatPrice !== 0 &&
+                                  `-${formatLikeCurrency(
+                                    (
+                                      fiatPrice * atomicToHuman(tx[2], false)
+                                    ).toFixed(2)
+                                  ).substring(1)}${fiatSymbol}`}
+                                {displayCurrency === 'fiat' &&
+                                  fiatPrice === 0 &&
+                                  ''}
+                              </p>
+                            </td>
+                          )}
+                          {tx[2] > 0 && (
+                            <td>
+                              <p className="has-text-right">
+                                {displayCurrency === Configure.ticker &&
+                                  atomicToHuman(tx[2], true)}
+                                {displayCurrency === 'fiat' &&
+                                  symbolLocation === 'prefix' &&
+                                  `${fiatSymbol}${formatLikeCurrency(
+                                    (
+                                      fiatPrice * atomicToHuman(tx[2], false)
+                                    ).toFixed(fiatDecimals)
+                                  )}`}
+                                {displayCurrency === 'fiat' &&
+                                  symbolLocation === 'suffix' &&
+                                  `${formatLikeCurrency(
+                                    (
+                                      fiatPrice * atomicToHuman(tx[2], false)
+                                    ).toFixed(fiatDecimals)
+                                  )}${fiatSymbol}`}
+                              </p>
+                            </td>
+                          )}
                           <td>
                             <p className="has-text-right">
                               {displayCurrency === Configure.ticker &&
-                                atomicToHuman(tx[2], true)}
+                                atomicToHuman(tx[3], true)}
                               {displayCurrency === 'fiat' &&
                                 symbolLocation === 'prefix' &&
                                 `${fiatSymbol}${formatLikeCurrency(
                                   (
-                                    fiatPrice * atomicToHuman(tx[2], false)
+                                    fiatPrice * atomicToHuman(tx[3], false)
                                   ).toFixed(fiatDecimals)
                                 )}`}
                               {displayCurrency === 'fiat' &&
                                 symbolLocation === 'suffix' &&
                                 `${formatLikeCurrency(
                                   (
-                                    fiatPrice * atomicToHuman(tx[2], false)
+                                    fiatPrice * atomicToHuman(tx[3], false)
                                   ).toFixed(fiatDecimals)
                                 )}${fiatSymbol}`}
                             </p>
                           </td>
-                        )}
-                        <td>
-                          <p className="has-text-right">
-                            {displayCurrency === Configure.ticker &&
-                              atomicToHuman(tx[3], true)}
-                            {displayCurrency === 'fiat' &&
-                              symbolLocation === 'prefix' &&
-                              `${fiatSymbol}${formatLikeCurrency(
-                                (
-                                  fiatPrice * atomicToHuman(tx[3], false)
-                                ).toFixed(fiatDecimals)
-                              )}`}
-                            {displayCurrency === 'fiat' &&
-                              symbolLocation === 'suffix' &&
-                              `${formatLikeCurrency(
-                                (
-                                  fiatPrice * atomicToHuman(tx[3], false)
-                                ).toFixed(fiatDecimals)
-                              )}${fiatSymbol}`}
-                          </p>
-                        </td>
-                      </tr>
-                      {rowIsExpanded && (
-                        <tr>
-                          <td />
-                          <td colSpan={4}>
-                            <table className="swing-in-top-fwd">
-                              <tbody>
-                                <tr className="no-hover">
-                                  <td>
-                                    <p>
-                                      <b>Date & Time</b>
-                                      <br />
-                                      <b>Confirmations</b>
-                                      <br />
-                                      <b>Block Height</b>
-                                      <br />
-                                      <b>Unlock Time</b>
-                                      <br />
-                                      <b>Transaction Hash</b>
-                                      <br />
-                                      <b>Payment ID</b>
-                                      <br />
-                                      <b>Fee</b>
-                                      <br />
-                                      <b>Amount</b>
-                                      <br />
-                                    </p>
-                                  </td>
-                                  <td>
-                                    {tx[0] === 0
-                                      ? 'Still In Memory Pool'
-                                      : convertTimestamp(tx[0])}
-                                    <br />
-                                    {tx[0] !== 0
-                                      ? Math.max(networkBlockHeight - tx[4], 0)
-                                      : 0}
-                                    <br />
-                                    {tx[0] === 0
-                                      ? 'Still In Memory Pool'
-                                      : formatLikeCurrency(tx[4])}
-                                    <br />
-                                    {tx[8]} <br />
-                                    {tx[1]} <br />
-                                    {tx[5] !== '' ? tx[5] : 'none'}
-                                    <br />
-                                    {atomicToHuman(tx[7], true)} {Configure.ticker}
-                                    <br />
-                                    <p
-                                      className={
-                                        tx[2] < 0
-                                          ? 'is-negative-transaction has-text-danger'
-                                          : ''
-                                      }
-                                    >
-                                      {atomicToHuman(tx[2], true)} {Configure.ticker}
-                                    </p>
-                                    <br />
-                                    <br />
-                                    <button
-                                      className={`button ${elementBaseColor}`}
-                                      value={transactionHash}
-                                      onClick={this.openInExplorer}
-                                    >
-                                      View on Block Explorer
-                                    </button>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
                         </tr>
-                      )}
-                    </Fragment>
-                  );
-                })
-                }
+                        {rowIsExpanded && (
+                          <tr>
+                            <td />
+                            <td colSpan={4}>
+                              <table className="swing-in-top-fwd">
+                                <tbody>
+                                  <tr className="no-hover">
+                                    <td>
+                                      <p>
+                                        <b>Date & Time</b>
+                                        <br />
+                                        <b>Confirmations</b>
+                                        <br />
+                                        <b>Block Height</b>
+                                        <br />
+                                        <b>Unlock Time</b>
+                                        <br />
+                                        <b>Transaction Hash</b>
+                                        <br />
+                                        <b>Payment ID</b>
+                                        <br />
+                                        <b>Fee</b>
+                                        <br />
+                                        <b>Amount</b>
+                                        <br />
+                                      </p>
+                                    </td>
+                                    <td>
+                                      {tx[0] === 0
+                                        ? 'Still In Memory Pool'
+                                        : convertTimestamp(tx[0])}
+                                      <br />
+                                      {tx[0] !== 0
+                                        ? Math.max(
+                                            networkBlockHeight - tx[4],
+                                            0
+                                          )
+                                        : 0}
+                                      <br />
+                                      {tx[0] === 0
+                                        ? 'Still In Memory Pool'
+                                        : formatLikeCurrency(tx[4])}
+                                      <br />
+                                      {tx[8]} <br />
+                                      {tx[1]} <br />
+                                      {tx[5] !== '' ? tx[5] : 'none'}
+                                      <br />
+                                      {atomicToHuman(tx[7], true)}{' '}
+                                      {Configure.ticker}
+                                      <br />
+                                      <p
+                                        className={
+                                          tx[2] < 0
+                                            ? 'is-negative-transaction has-text-danger'
+                                            : ''
+                                        }
+                                      >
+                                        {atomicToHuman(tx[2], true)}{' '}
+                                        {Configure.ticker}
+                                      </p>
+                                      <br />
+                                      <br />
+                                      <button
+                                        className={`button ${elementBaseColor}`}
+                                        value={transactionHash}
+                                        onClick={this.openInExplorer}
+                                      >
+                                        View on Block Explorer
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
               </tbody>
             </table>
             {transactions !== undefined && transactions.length === 0 && (
@@ -432,28 +448,29 @@ export default class Home extends Component<Props, State> {
                 </div>
               </div>
             )}
-            {transactions !== undefined && transactions.length > transactionCount && (
-              <form>
-                <div className="field">
-                  <div className="buttons">
-                    <button
-                      type="submit"
-                      className="button is-warning"
-                      onClick={this.handleLoadMore}
-                    >
-                      {il8n.load_more}
-                    </button>
-                    <button
-                      type="submit"
-                      className="button is-danger"
-                      onClick={this.resetDefault}
-                    >
-                      {il8n.reset}
-                    </button>
+            {transactions !== undefined &&
+              transactions.length > transactionCount && (
+                <form>
+                  <div className="field">
+                    <div className="buttons">
+                      <button
+                        type="submit"
+                        className="button is-warning"
+                        onClick={this.handleLoadMore}
+                      >
+                        {il8n.load_more}
+                      </button>
+                      <button
+                        type="submit"
+                        className="button is-danger"
+                        onClick={this.resetDefault}
+                      >
+                        {il8n.reset}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            )}
+                </form>
+              )}
           </div>
           <BottomBar darkMode={darkMode} />
         </div>

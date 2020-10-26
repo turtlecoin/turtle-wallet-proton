@@ -15,7 +15,7 @@ import { atomicToHuman, convertTimestamp } from '../mainWindow/utils/utils';
 import Configure from '../Configure';
 
 export function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default class Backend {
@@ -212,21 +212,24 @@ export default class Backend {
     const payments = [];
 
     if (sendAll) {
-        payments.push([
-            address,
-            (networkHeight >= Configure.feePerByteHeight) ? 1 : (unlockedBalance - nodeFee - txFee), /* Amount does not matter for sendAll destination */
-        ]);
+      payments.push([
+        address,
+        networkHeight >= Configure.feePerByteHeight
+          ? 1
+          : unlockedBalance -
+            nodeFee -
+            txFee /* Amount does not matter for sendAll destination */
+      ]);
     } else {
-        payments.push([
-            address,
-            amount,
-        ]);
+      payments.push([address, amount]);
     }
 
     const result = await this.wallet.sendTransactionAdvanced(
       payments, // destinations
       undefined, // mixin
-      (networkHeight >= Configure.feePerByteHeight) ? undefined : {isFixedFee: true, fixedFee: txFee}, // fee
+      networkHeight >= Configure.feePerByteHeight
+        ? undefined
+        : { isFixedFee: true, fixedFee: txFee }, // fee
       paymentID, // paymentID
       undefined, // subwalletsToTakeFrom
       undefined, // changeAddress
@@ -247,14 +250,12 @@ export default class Backend {
         let transactionSum = 0;
 
         /* We could just get the sum by calling getBalance.. but it's
-        * possibly just changed. Safest to iterate over prepared
-        * transaction and calculate it. */
+         * possibly just changed. Safest to iterate over prepared
+         * transaction and calculate it. */
         for (const input of result.preparedTransaction.inputs) {
           transactionSum += input.input.amount;
         }
-        actualAmount = transactionSum
-                     - txFee
-                     - nodeFee;
+        actualAmount = transactionSum - txFee - nodeFee;
       }
       const response = {
         status: 'SUCCESS',
@@ -357,10 +358,7 @@ export default class Backend {
   async getTransactions(displayCount: number): void {
     this.setLastTxAmountRequested(displayCount);
     const get_tx = await this.getFormattedTransactions(0, displayCount, true);
-    this.send(
-      'transactionList',
-      get_tx
-    );
+    this.send('transactionList', get_tx);
   }
 
   getTransactionCount(): void {
@@ -460,8 +458,12 @@ export default class Backend {
           localDaemonBlockCount,
           networkBlockCount
         ]);
-        if (networkBlockCount !== 0 && walletBlockCount !== 0 && (networkBlockCount - walletBlockCount) < 40) {
-            this.send('balance', await this.wallet.getBalance());
+        if (
+          networkBlockCount !== 0 &&
+          walletBlockCount !== 0 &&
+          networkBlockCount - walletBlockCount < 40
+        ) {
+          this.send('balance', await this.wallet.getBalance());
         }
       }
     );
@@ -486,7 +488,10 @@ export default class Backend {
     this.setWalletActive(true);
     this.send('syncStatus', this.wallet.getSyncStatus());
     this.send('primaryAddress', this.wallet.getPrimaryAddress());
-    this.send('transactionList', await this.getFormattedTransactions(0, 50, true));
+    this.send(
+      'transactionList',
+      await this.getFormattedTransactions(0, 50, true)
+    );
     this.getTransactionCount();
     this.send('balance', await this.wallet.getBalance());
     this.send('walletActiveStatus', true);
@@ -497,15 +502,15 @@ export default class Backend {
   }
 
   async getMnemonic(): string {
-      let [mnemonicSeed, err] = await this.wallet.getMnemonicSeed();
-      if (err) {
-        if (err.errorCode === 41) {
-          mnemonicSeed = '';
-        } else {
-          throw err;
-        }
+    let [mnemonicSeed, err] = await this.wallet.getMnemonicSeed();
+    if (err) {
+      if (err.errorCode === 41) {
+        mnemonicSeed = '';
+      } else {
+        throw err;
       }
-      return mnemonicSeed;
+    }
+    return mnemonicSeed;
   }
 
   async getSecret(): string {

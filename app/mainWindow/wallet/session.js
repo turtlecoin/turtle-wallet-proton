@@ -138,7 +138,6 @@ export default class WalletSession {
     }
   };
 
-
   updateNodeList = async () => {
     const apiURL = `${Configure.nodeListURL}`;
 
@@ -153,20 +152,18 @@ export default class WalletSession {
     try {
       const result = await request(requestOptions);
       if (result.nodes) {
-         const activeNodes = [];
-         for (let i = 0; i < result.nodes.length; i++) {
-            if (result.nodes[i].online === true) {
-               activeNodes.push(
-                  {
-                     value: result.nodes[i].url + ':' + result.nodes[i].port.toString(),
-                     label: result.nodes[i].url + ':' + result.nodes[i].port.toString()
-                  });
-            }
-         }
-         log.debug(
-            `Get Total Online nodes: ${result.nodes.length}`
-         );
-         this.daemons = activeNodes;
+        const activeNodes = [];
+        for (let i = 0; i < result.nodes.length; i++) {
+          if (result.nodes[i].online === true) {
+            activeNodes.push({
+              value:
+                result.nodes[i].url + ':' + result.nodes[i].port.toString(),
+              label: result.nodes[i].url + ':' + result.nodes[i].port.toString()
+            });
+          }
+        }
+        log.debug(`Get Total Online nodes: ${result.nodes.length}`);
+        this.daemons = activeNodes;
       }
     } catch (err) {
       log.debug(`Failed to get node list from API: : \n`, err);

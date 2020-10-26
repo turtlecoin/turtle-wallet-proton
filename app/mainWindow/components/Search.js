@@ -159,14 +159,18 @@ export default class Search extends Component<Props, States> {
   openSearchInExplorer = () => {
     const { query } = this.state;
     remote.shell.openExternal(
-      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(query)}`
+      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(
+        query
+      )}`
     );
   };
 
   openInExplorer = (event: any) => {
     const hash = event.target.value;
     remote.shell.openExternal(
-      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(hash)}`
+      `${Configure.ExplorerURL}/transaction.html?hash=${encodeURIComponent(
+        hash
+      )}`
     );
   };
 
@@ -543,7 +547,8 @@ export default class Search extends Component<Props, States> {
                                       {hash} <br />
                                       {paymentID !== '' ? paymentID : 'none'}
                                       <br />
-                                      {atomicToHuman(fee, true)} Configure.ticker
+                                      {atomicToHuman(fee, true)}{' '}
+                                      Configure.ticker
                                       <br />
                                       <p
                                         className={
@@ -552,7 +557,8 @@ export default class Search extends Component<Props, States> {
                                             : ''
                                         }
                                       >
-                                        {atomicToHuman(amount, true)} Configure.ticker
+                                        {atomicToHuman(amount, true)}{' '}
+                                        Configure.ticker
                                       </p>
                                       <br />
                                       <br />

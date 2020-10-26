@@ -16,7 +16,7 @@ import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
 import WalletSession from './wallet/session';
-import iConfig from './constants/config';
+import iConfig from './constants/config.json';
 import AutoUpdater from './wallet/autoUpdater';
 import LoginCounter from './wallet/loginCounter';
 import { uiType } from './utils/utils';
@@ -143,10 +143,9 @@ ipcRenderer.on('fromMain', (event: Electron.IpcRendererEvent, message: any) => {
   const { data, messageType } = message;
   switch (messageType) {
     case 'config':
-      log.info(data);
+      const config = data.config;
 
-      const config = data;
-      const configPath = directories[0]
+      const configPath = data.configPath;
       // eslint-disable-next-line prefer-destructuring
       darkMode = config.darkMode;
       // eslint-disable-next-line prefer-destructuring
@@ -472,19 +471,15 @@ ipcRenderer.on('handleOpen', handleOpen);
 eventEmitter.on('handleOpen', handleOpen);
 
 function handleAbout() {
-  remote.shell.openExternal(
-    `${Configure.GitHubRepo}/issues#readme`
-  );
+  remote.shell.openExternal(`${Configure.GitHubRepo}/issues#readme`);
 }
 
 function handleHelp() {
-  remote.shell.openExternal(`${Configure.DiscordURL}`)
+  remote.shell.openExternal(`${Configure.DiscordURL}`);
 }
 
 function handleIssues() {
-  remote.shell.openExternal(
-    `${Configure.GitHubRepo}/issues`
-  );
+  remote.shell.openExternal(`${Configure.GitHubRepo}/issues`);
 }
 
 eventEmitter.on('handleHelp', handleHelp);
@@ -693,6 +688,10 @@ async function handleOpen() {
 }
 
 export function reInitWallet(walletPath: string) {
+  log.info('reInitWallet() called');
+  log.info('parameter:');
+  log.info(walletPath);
+
   ipcRenderer.send('fromFrontend', 'openNewWallet', undefined);
   configManager.modifyConfig('walletFile', walletPath);
   ipcRenderer.send('fromFrontend', 'config', config);

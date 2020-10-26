@@ -56,9 +56,7 @@ export default class MenuBuilder {
         {
           label: `${il8n.about} ${productName}`,
           click: () => {
-            shell.openExternal(
-              `${Configure.GitHubRepo}/issues#readme`
-            );
+            shell.openExternal(`${Configure.GitHubRepo}/issues#readme`);
           }
         },
         { type: 'separator' },
@@ -277,17 +275,13 @@ export default class MenuBuilder {
         {
           label: il8n.report_bug,
           click() {
-            shell.openExternal(
-              `${Configure.GitHubRepo}/issues`
-            );
+            shell.openExternal(`${Configure.GitHubRepo}/issues`);
           }
         },
         {
           label: il8n.feature_request,
           click() {
-            shell.openExternal(
-              `${Configure.GitHubRepo}/issues`
-            );
+            shell.openExternal(`${Configure.GitHubRepo}/issues`);
           }
         }
       ]
@@ -537,25 +531,19 @@ export default class MenuBuilder {
           {
             label: il8n.about,
             click: () => {
-              shell.openExternal(
-                `${Configure.GitHubRepo}/issues#readme`
-              );
+              shell.openExternal(`${Configure.GitHubRepo}/issues#readme`);
             }
           },
           {
             label: il8n.report_bug,
             click: () => {
-              shell.openExternal(
-                `${Configure.GitHubRepo}/issues`
-              );
+              shell.openExternal(`${Configure.GitHubRepo}/issues`);
             }
           },
           {
             label: il8n.feature_request,
             click: () => {
-              shell.openExternal(
-                `${Configure.GitHubRepo}/issues`
-              );
+              shell.openExternal(`${Configure.GitHubRepo}/issues`);
             }
           }
         ]

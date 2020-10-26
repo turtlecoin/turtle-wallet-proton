@@ -29,9 +29,7 @@ export default class AutoUpdater {
         log.info(body);
         if (semver.gt(body.latestVersion, npmPackage.version)) {
           log.debug(
-            `Update required! Local version: ${
-              npmPackage.version
-            }, latest version: ${body.latestVersion}`
+            `Update required! Local version: ${npmPackage.version}, latest version: ${body.latestVersion}`
           );
           const updateFile = body.downloadPath;
           eventEmitter.emit('updateRequired', updateFile);

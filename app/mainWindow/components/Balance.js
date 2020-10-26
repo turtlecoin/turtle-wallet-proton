@@ -106,7 +106,9 @@ export default class Balance extends Component<Props, State> {
 
     if (displayCurrency === Configure.ticker) {
       balanceTooltip =
-        `Unlocked: ${atomicToHuman(unlockedBalance, true)} ${Configure.ticker}<br>` +
+        `Unlocked: ${atomicToHuman(unlockedBalance, true)} ${
+          Configure.ticker
+        }<br>` +
         `Locked: ${atomicToHuman(lockedBalance, true)} ${Configure.ticker}`;
     } else if (symbolLocation === 'prefix' && displayCurrency === 'fiat') {
       balanceTooltip =

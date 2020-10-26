@@ -22,6 +22,10 @@ export default class ProtonConfig {
   }
 
   modifyConfig(propertyName: string, value: any) {
+    if (!value) {
+      console.log(propertyName + " doesn't have a value");
+      return;
+    }
     const programDirectory = this.getConfigPath();
     log.debug(`Config update: ${propertyName} set to ${value.toString()}`);
     config[propertyName] = value;

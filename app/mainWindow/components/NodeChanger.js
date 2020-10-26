@@ -30,8 +30,13 @@ export default class NodeChanger extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      connectionString:
-        `${session.getDaemonConnectionInfo().host ? (session.getDaemonConnectionInfo().host + ':' +session.getDaemonConnectionInfo().port) : 'Connecting, please wait...'}`,
+      connectionString: `${
+        session.getDaemonConnectionInfo().host
+          ? session.getDaemonConnectionInfo().host +
+            ':' +
+            session.getDaemonConnectionInfo().port
+          : 'Connecting, please wait...'
+      }`,
       nodeChangeInProgress: false,
       ssl: session.getDaemonConnectionInfo().ssl || false,
       Selected_Node: Configure.defaultDaemon,
@@ -68,7 +73,13 @@ export default class NodeChanger extends Component<Props, State> {
 
   resetConnectionString = () => {
     this.setState({
-      connectionString: `${session.getDaemonConnectionInfo().host ? (session.getDaemonConnectionInfo().host + ':' +session.getDaemonConnectionInfo().port) : 'Connecting, please wait...'}`,
+      connectionString: `${
+        session.getDaemonConnectionInfo().host
+          ? session.getDaemonConnectionInfo().host +
+            ':' +
+            session.getDaemonConnectionInfo().port
+          : 'Connecting, please wait...'
+      }`,
       nodeChangeInProgress: false,
       ssl: session.getDaemonConnectionInfo().ssl
     });
@@ -81,7 +92,7 @@ export default class NodeChanger extends Component<Props, State> {
   handleNodeListChange = (selectedOptions, data) => {
     this.setState({ selectedOptions });
     this.setState({ connectionString: selectedOptions.label });
-  }
+  };
 
   handleNodeChangeInProgress = () => {
     this.setState({
@@ -98,7 +109,7 @@ export default class NodeChanger extends Component<Props, State> {
       ssl: session.daemon.ssl,
       node_NewFee: session.getNodeFee() || 0
     });
-    log.debug(`Network Fee ${session.getNodeFee()  || 0}`);
+    log.debug(`Network Fee ${session.getNodeFee() || 0}`);
   };
 
   changeNode = () => {
@@ -156,8 +167,8 @@ export default class NodeChanger extends Component<Props, State> {
       nodeChangeInProgress,
       connectionString,
       ssl,
-	  Selected_Node,
-	  node_NewFee
+      Selected_Node,
+      node_NewFee
     } = this.state;
     return (
       <form onSubmit={this.changeNode}>
@@ -206,18 +217,18 @@ export default class NodeChanger extends Component<Props, State> {
                 <i className="fas fa-sync fa-spin" />
               </span>
             )}
-			<br />
-			<br />
-			<p className={`has-text-weight-bold ${textColor}`}>
-			  Select a node:
-			</p>
-			<div style={{width: '350px'}}>
-			<Select
-			  value={this.state.selectedOptions}
-			  onChange={this.handleNodeListChange}
-			  options={session.daemons}
-			/>
-			</div>
+            <br />
+            <br />
+            <p className={`has-text-weight-bold ${textColor}`}>
+              Select a node:
+            </p>
+            <div style={{ width: '350px' }}>
+              <Select
+                value={this.state.selectedOptions}
+                onChange={this.handleNodeListChange}
+                options={session.daemons}
+              />
+            </div>
           </div>
           {nodeChangeInProgress === true && (
             <div className="control">

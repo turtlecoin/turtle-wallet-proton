@@ -260,10 +260,9 @@ export default class Send extends Component<Props, State> {
               <br />
               {atomicToHuman(nodeFee + txFee, true)} {Configure.ticker}
               {nodeFee > 0 &&
-                ` (including a node fee of ${atomicToHuman(
-                  nodeFee,
-                  true
-                )} ${Configure.ticker})`}
+                ` (including a node fee of ${atomicToHuman(nodeFee, true)} ${
+                  Configure.ticker
+                })`}
             </p>{' '}
             {paymentID !== '' && (
               <p className={`subtitle ${textColor}`}>
@@ -309,12 +308,14 @@ export default class Send extends Component<Props, State> {
 
     const sufficientFunds = sendAll
       ? true
-      : (session.getUnlockedBalance() + session.getLockedBalance()) / (10 ** Configure.decimalPlaces) >=
+      : (session.getUnlockedBalance() + session.getLockedBalance()) /
+          10 ** Configure.decimalPlaces >=
         Number(enteredAmount);
 
     const sufficientUnlockedFunds = sendAll
       ? true
-      : session.getUnlockedBalance() > Number(enteredAmount) / (10 ** Configure.decimalPlaces);
+      : session.getUnlockedBalance() >
+        Number(enteredAmount) / 10 ** Configure.decimalPlaces;
 
     if (!sendAll && (sendToAddress === '' || enteredAmount === '')) {
       return;
@@ -364,8 +365,12 @@ export default class Send extends Component<Props, State> {
       address: sendToAddress,
       amount:
         displayCurrency === Configure.ticker
-          ? Number(enteredAmount) * (10 ** Configure.decimalPlaces)
-          : parseInt((Number(enteredAmount) * (10 ** Configure.decimalPlaces)) / fiatPrice, 10),
+          ? Number(enteredAmount) * 10 ** Configure.decimalPlaces
+          : parseInt(
+              (Number(enteredAmount) * 10 ** Configure.decimalPlaces) /
+                fiatPrice,
+              10
+            ),
       paymentID,
       sendAll
     };
@@ -386,7 +391,7 @@ export default class Send extends Component<Props, State> {
 
     await this.setState({
       selectedContact: { label: sendToAddress, value: sendToAddress },
-      enteredAmount: String(amount / (10 ** Configure.decimalPlaces)),
+      enteredAmount: String(amount / 10 ** Configure.decimalPlaces),
       sendToAddress,
       paymentID,
       sendAll: false
