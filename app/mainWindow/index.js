@@ -21,6 +21,7 @@ import AutoUpdater from './wallet/autoUpdater';
 import LoginCounter from './wallet/loginCounter';
 import { uiType } from './utils/utils';
 import ProtonConfig from './wallet/protonConfig';
+import Configure from "../Configure";
 
 export function savedInInstallDir(response: string) {
   const programDirectory = path.resolve(remote.app.getAppPath(), '../../');
@@ -398,6 +399,16 @@ function handlePasswordChangeResponse(response: any) {
 eventEmitter.on('getUpdate', () => {
   remote.shell.openExternal(latestUpdate);
   remote.app.exit();
+});
+
+ipcRenderer.on('handleLedger', () => {
+  const message = (
+    <p className={`subtitle ${textColor}`}>
+      Please check your Ledger and enter the PIN when prompted.
+    </p>
+  );
+
+  eventEmitter.emit('openModal', message, 'OK', null, null);
 });
 
 ipcRenderer.on('handleLock', () => {

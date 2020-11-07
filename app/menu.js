@@ -353,6 +353,11 @@ export default class MenuBuilder {
     this.mainWindow.webContents.send('handleDonate');
   }
 
+  handleLedgerImport() {
+    this.mainWindow.webContents.send('handleLedger');
+    messageRelayer.sendToBackend('handleLedger');
+  }
+
   buildDefaultTemplate() {
     const templateDefault = [
       {
@@ -420,6 +425,12 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+L',
             click: () => {
               this.handleLock();
+            }
+          },
+          {
+            label: 'Open from Ledger',
+            click: () => {
+              this.handleLedgerImport();
             }
           }
         ]

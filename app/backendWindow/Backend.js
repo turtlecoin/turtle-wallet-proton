@@ -14,6 +14,8 @@ import { createObjectCsvWriter } from 'csv-writer';
 import { atomicToHuman, convertTimestamp } from '../mainWindow/utils/utils';
 import Configure from '../Configure';
 
+const TransportNodeHID = require('@ledgerhq/hw-transport-node-hid').default;
+
 export function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -41,6 +43,8 @@ export default class Backend {
 
   transactionCount: number = 0;
 
+  ledgerOpen: boolean;
+
   saveInterval: IntervalID = setInterval(
     this.saveWallet.bind(this),
     1000 * 60 * 5,
@@ -54,6 +58,33 @@ export default class Backend {
     this.walletFile = config.walletFile;
     this.logLevel = config.logLevel;
     this.daemon = new Daemon(this.daemonHost, this.daemonPort);
+    this.ledgerOpen = false;
+  }
+
+  async importFromLedger() {
+    const devices = await TransportNodeHID.list();
+
+    if (devices.length === 0) {
+      log.warn('No ledger detected.');
+      return;
+    }
+
+    const transport = await TransportNodeHID.create();
+
+    const [wallet, err] = await this.wallet.importWalletFromLedger(
+      this.daemon,
+      1000000,
+      {
+        ledgerTransport: transport
+      }
+    );
+
+    if (err) {
+      log.warn(`Failed to load wallet:${err.toString()}`);
+    } else {
+      this.ledgerOpen = true;
+      this.walletInit(wallet);
+    }
   }
 
   setNotifications(status: boolean) {
@@ -547,6 +578,7 @@ export default class Backend {
       Configure
     );
     if (!error) {
+      this.ledgerOpen = false;
       this.walletInit(openWallet);
     } else if (error.errorCode === WalletErrorCode.WRONG_PASSWORD) {
       this.send('authenticationStatus', false);

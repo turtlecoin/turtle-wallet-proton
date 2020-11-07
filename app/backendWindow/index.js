@@ -19,7 +19,11 @@ ipcRenderer.on('fromFrontend', (event: IpcRendererEvent, message: any) => {
 
 async function parseMessage(message: any) {
   const { messageType, data } = message;
+  log.info(messageType);
   switch (messageType) {
+    case 'handleLedger':
+      await backend.importFromLedger();
+      break;
     case 'config':
       if (data.walletFile !== '') {
         backend = new Backend(data);
