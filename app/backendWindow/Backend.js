@@ -264,7 +264,7 @@ export default class Backend {
         paymentID,
         amount: actualAmount,
         fee: txFee,
-        nodeFee: nodeFee,
+        nodeFee,
         error: undefined
       };
       this.send('prepareTransactionResponse', response);
@@ -279,7 +279,7 @@ export default class Backend {
         paymentID,
         amount,
         fee: txFee,
-        nodeFee: nodeFee,
+        nodeFee,
         error: result.error
       };
       this.send('prepareTransactionResponse', response);
@@ -357,8 +357,8 @@ export default class Backend {
 
   async getTransactions(displayCount: number): void {
     this.setLastTxAmountRequested(displayCount);
-    const get_tx = await this.getFormattedTransactions(0, displayCount, true);
-    this.send('transactionList', get_tx);
+    const getTx = await this.getFormattedTransactions(0, displayCount, true);
+    this.send('transactionList', getTx);
   }
 
   getTransactionCount(): void {
@@ -502,6 +502,7 @@ export default class Backend {
   }
 
   async getMnemonic(): string {
+    // eslint-disable-next-line prefer-const
     let [mnemonicSeed, err] = await this.wallet.getMnemonicSeed();
     if (err) {
       if (err.errorCode === 41) {
@@ -521,7 +522,7 @@ export default class Backend {
     ] = this.wallet.getPrimaryAddressPrivateKeys();
     // eslint-disable-next-line prefer-const
 
-    let mnemonicSeed = await this.getMnemonic();
+    const mnemonicSeed = await this.getMnemonic();
 
     const secret =
       // eslint-disable-next-line prefer-template
