@@ -67,9 +67,9 @@ export default class Receive extends Component<Props, State> {
     }, 500);
   };
 
-  generateIntegratedAddress = (specifiedID?: string) => {
+  generateIntegratedAddress = async (specifiedID?: string) => {
     const paymentID = specifiedID || crypto.randomBytes(32).toString('hex');
-    const integratedAddress = createIntegratedAddress(
+    const integratedAddress = await createIntegratedAddress(
       session.getPrimaryAddress(),
       paymentID,
       Configure
