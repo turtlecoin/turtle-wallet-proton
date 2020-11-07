@@ -71,7 +71,7 @@ export default class Backend {
 
     const transport = await TransportNodeHID.create();
 
-    const [wallet, err] = await this.wallet.importWalletFromLedger(
+    const [wallet, err] = await WalletBackend.importWalletFromLedger(
       this.daemon,
       1000000,
       {
