@@ -127,8 +127,8 @@ export default class Backend {
     }
   }
 
-  exportToCSV(savePath: string) {
-    const rawTransactions = this.getFormattedTransactions(
+  async exportToCSV(savePath: string) {
+    const rawTransactions = await this.getFormattedTransactions(
       undefined,
       undefined,
       true
@@ -154,7 +154,7 @@ export default class Backend {
         bal: atomicToHuman(item[3], true)
       };
     });
-    csvWriter.writeRecords(csvData);
+    await csvWriter.writeRecords(csvData);
   }
 
   setScanCoinbaseTransactions(value: boolean) {
@@ -199,11 +199,11 @@ export default class Backend {
   }
 
   async prepareTransaction(transaction): Promise<void> {
-    const [unlockedBalance, lockedBalance] = await this.wallet.getBalance();
+    const [unlockedBalance] = await this.wallet.getBalance();
 
     const networkHeight: number = this.daemon.getNetworkBlockCount();
 
-    const [feeAddress, nodeFee] = this.wallet.getNodeFee();
+    const [, nodeFee] = this.wallet.getNodeFee();
 
     let txFee = Configure.minimumFee;
 
