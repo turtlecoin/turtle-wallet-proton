@@ -122,14 +122,14 @@ if (config) {
   isQuitting = !config.closeToTray;
 }
 
+if (os.platform() === "darwin") {
+  isQuitting = false;
+}
+
 if (os.platform() !== 'win32') {
   trayIcon = path.join(__dirname, './mainWindow/images/icon_color_64x64.png');
 } else {
   trayIcon = path.join(__dirname, './mainWindow/images/icon.ico');
-}
-
-if (os.platform() === 'darwin') {
-  isQuitting = true;
 }
 
 let mainWindow = null;
@@ -173,7 +173,6 @@ app.on('second-instance', () => {
 });
 
 app.on('before-quit', () => {
-  log.debug('Exiting application.');
   isQuitting = true;
 });
 
@@ -268,9 +267,10 @@ app.on('ready', async () => {
         {
           label: 'Quit',
           click() {
+            log.info("reached");
+            messageRelayer.sendToBackend('stopRequest');
             isQuitting = true;
             quitTimeout = setTimeout(app.exit, 1000 * 10);
-            messageRelayer.sendToBackend('stopRequest');
           }
         }
       ])
@@ -300,21 +300,21 @@ app.on('ready', async () => {
   });
 
   mainWindow.on('close', event => {
-    event.preventDefault();
     if (!isQuitting && mainWindow) {
+      event.preventDefault();
       log.debug('Closing to system tray or dock.');
       mainWindow.hide();
     } else {
       isQuitting = true;
       quitTimeout = setTimeout(app.exit, 1000 * 10);
-      messageRelayer.sendToBackend('stopRequest');
     }
   });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-    backendWindow = null;
-  });
+  app.on("activate", function () {
+    mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+});
 
   mainWindow.on('unresponsive', () => {
     // catch the unresponsive event
@@ -329,7 +329,8 @@ app.on('ready', async () => {
     }
   });
 
-  process.on('uncaughtException', () => {
+  process.on('uncaughtException', (event) => {
+    console.log(event);
     // catch uncaught exceptions in the main process
     dialog.showErrorBox(
       'Uncaught Error',

@@ -343,9 +343,12 @@ export default class ImportLedger extends Component<Props, State> {
                 {!this.state.waitingOnLedger && (
                   <div>
                     <p className={`subtitle ${textColor}`}>
-                      Welcome to the wallet import wizard. Please enter the scan
-                      height for your ledger wallet. If this is a brand new
-                      wallet, check the{' '}
+                      Welcome to the wallet import wizard. This will import a
+                      view only wallet you can use with your ledger. Your
+                      private keys never leave your ledger, and it handles all
+                      of the sensitive operations. Please enter the scan height
+                      for your ledger wallet. If this is a brand new wallet,
+                      check the{' '}
                       <a
                         onClick={() => {
                           shell.openExternal(
