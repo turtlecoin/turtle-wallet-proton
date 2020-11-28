@@ -122,7 +122,7 @@ if (config) {
   isQuitting = !config.closeToTray;
 }
 
-if (os.platform() === "darwin") {
+if (os.platform() === 'darwin') {
   isQuitting = false;
 }
 
@@ -267,7 +267,7 @@ app.on('ready', async () => {
         {
           label: 'Quit',
           click() {
-            log.info("reached");
+            log.info('reached');
             messageRelayer.sendToBackend('stopRequest');
             isQuitting = true;
             quitTimeout = setTimeout(app.exit, 1000 * 10);
@@ -310,11 +310,11 @@ app.on('ready', async () => {
     }
   });
 
-  app.on("activate", function () {
+  app.on('activate', function() {
     mainWindow.restore();
     mainWindow.show();
     mainWindow.focus();
-});
+  });
 
   mainWindow.on('unresponsive', () => {
     // catch the unresponsive event
@@ -329,7 +329,7 @@ app.on('ready', async () => {
     }
   });
 
-  process.on('uncaughtException', (event) => {
+  process.on('uncaughtException', event => {
     console.log(event);
     // catch uncaught exceptions in the main process
     dialog.showErrorBox(
