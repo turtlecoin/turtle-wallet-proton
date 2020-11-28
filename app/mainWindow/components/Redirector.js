@@ -22,7 +22,8 @@ type State = {
   autoLockEnabled: boolean,
   settings: boolean,
   newWallet: boolean,
-  donate: boolean
+  donate: boolean,
+  ledgerImport: boolean
 };
 
 type Location = {
@@ -60,7 +61,8 @@ class Redirector extends Component<Props, State> {
       autoLockEnabled: config.autoLockEnabled,
       settings: false,
       newWallet: false,
-      donate: false
+      donate: false,
+      ledgerImport: false
     };
     const { autoLockInterval, autoLockEnabled } = this.state;
     this.goToImportFromSeed = this.goToImportFromSeed.bind(this);
@@ -93,6 +95,7 @@ class Redirector extends Component<Props, State> {
     ipcRenderer.on('importSeed', this.goToImportFromSeed);
     ipcRenderer.on('importKey', this.goToImportFromKey);
     ipcRenderer.on('handlePasswordChange', this.goToPasswordChange);
+    eventEmitter.on('importLedger', this.goToLedgerImport);
     eventEmitter.on('importSeed', this.goToImportFromSeed);
     eventEmitter.on('importKey', this.goToImportFromKey);
     eventEmitter.on('handlePasswordChange', this.goToPasswordChange);
@@ -125,6 +128,7 @@ class Redirector extends Component<Props, State> {
     ipcRenderer.off('importSeed', this.goToImportFromSeed);
     ipcRenderer.off('importKey', this.goToImportFromKey);
     ipcRenderer.off('handlePasswordChange', this.goToPasswordChange);
+    eventEmitter.off('importLedger', this.goToLedgerImport);
     eventEmitter.off('importSeed', this.goToImportFromSeed);
     eventEmitter.off('importKey', this.goToImportFromKey);
     eventEmitter.off('handlePasswordChange', this.goToPasswordChange);
@@ -144,6 +148,12 @@ class Redirector extends Component<Props, State> {
     clearTimeout(this.activityTimer);
     clearInterval(this.refreshPrice);
   }
+
+  goToLedgerImport = () => {
+    this.setState({
+      ledgerImport: true
+    });
+  };
 
   goToDonate = () => {
     this.setState({
@@ -261,8 +271,13 @@ class Redirector extends Component<Props, State> {
       freshRestore,
       settings,
       newWallet,
-      donate
+      donate,
+      ledgerImport
     } = this.state;
+
+    if (ledgerImport === true && pathname != '/importledger') {
+      return <Redirect to="/importledger" />;
+    }
 
     if (freshRestore === true && pathname !== '/changepassword') {
       loginCounter.freshRestore = false;
@@ -302,6 +317,7 @@ class Redirector extends Component<Props, State> {
       pathname !== '/login' &&
       pathname !== '/import' &&
       pathname !== '/importkey' &&
+      pathname !== '/importledger' &&
       pathname !== '/firststartup' &&
       pathname !== '/newwallet'
     ) {
@@ -317,6 +333,7 @@ class Redirector extends Component<Props, State> {
       pathname !== '/login' &&
       pathname !== '/import' &&
       pathname !== '/importkey' &&
+      pathname !== '/importledger' &&
       pathname !== '/firststartup' &&
       pathname !== '/newwallet'
     ) {
@@ -328,6 +345,7 @@ class Redirector extends Component<Props, State> {
       pathname !== '/firststartup' &&
       pathname !== '/import' &&
       pathname !== '/importkey' &&
+      pathname !== '/importledger' &&
       pathname !== '/newwallet'
     ) {
       return <Redirect to="/firststartup" />;

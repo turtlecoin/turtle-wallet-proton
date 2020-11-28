@@ -61,32 +61,6 @@ export default class Backend {
     this.ledgerOpen = false;
   }
 
-  async importFromLedger() {
-    const devices = await TransportNodeHID.list();
-
-    if (devices.length === 0) {
-      log.warn('No ledger detected.');
-      return;
-    }
-
-    const transport = await TransportNodeHID.create();
-
-    const [wallet, err] = await WalletBackend.importWalletFromLedger(
-      this.daemon,
-      1000000,
-      {
-        ledgerTransport: transport
-      }
-    );
-
-    if (err) {
-      log.warn(`Failed to load wallet:${err.toString()}`);
-    } else {
-      this.ledgerOpen = true;
-      this.walletInit(wallet);
-    }
-  }
-
   setNotifications(status: boolean) {
     this.notifications = status;
   }
@@ -577,13 +551,32 @@ export default class Backend {
       this.walletPassword,
       Configure
     );
+
     if (!error) {
       this.ledgerOpen = false;
       this.walletInit(openWallet);
     } else if (error.errorCode === WalletErrorCode.WRONG_PASSWORD) {
       this.send('authenticationStatus', false);
+    } else if (error.errorCode === WalletErrorCode.LEDGER_TRANSPORT_REQUIRED) {
+      const devices = await TransportNodeHID.list();
+      if (devices.length == 0) {
+        log.Warning('You must have a ledger plugged in.');
+        return;
+      }
+
+      const transport = await TransportNodeHID.create();
+      this.send('ledgerPrompt');
+      const [ledgerWallet, error] = await WalletBackend.openWalletFromFile(
+        this.daemon,
+        this.walletFile,
+        this.walletPassword,
+        { ...Configure, ledgerTransport: transport }
+      );
+      this.ledgerOpen = true;
+      this.walletInit(ledgerWallet);
     } else {
       error.errorString = error.toString();
+      console.log(error.errorCode, error.toString());
       this.send('authenticationError', error);
     }
   }

@@ -6,6 +6,7 @@
   "IMPORTKEY": "/importkey",
   "SETTINGS": "/settings",
   "LOGIN": "/login",
+  "IMPORTLEDGER": "/importledger",
   "CHANGEPASSWORD": "/changepassword",
   "FIRSTSTARTUP": "/firststartup",
   "TERMINAL": "/terminal",

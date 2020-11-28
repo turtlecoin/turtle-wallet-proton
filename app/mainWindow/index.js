@@ -21,7 +21,7 @@ import AutoUpdater from './wallet/autoUpdater';
 import LoginCounter from './wallet/loginCounter';
 import { uiType } from './utils/utils';
 import ProtonConfig from './wallet/protonConfig';
-import Configure from "../Configure";
+import Configure from '../Configure';
 
 export function savedInInstallDir(response: string) {
   const programDirectory = path.resolve(remote.app.getAppPath(), '../../');
@@ -50,7 +50,7 @@ export const il8n = new LocalizedStrings({
   fr: require('./il8n/fr.json')
 });
 
-export let config = iConfig;
+export const config = iConfig;
 export let configManager = null;
 
 export const eventEmitter = new EventEmitter();
@@ -144,9 +144,9 @@ ipcRenderer.on('fromMain', (event: Electron.IpcRendererEvent, message: any) => {
   const { data, messageType } = message;
   switch (messageType) {
     case 'config':
-      const config = data.config;
+      const { config } = data;
 
-      const configPath = data.configPath;
+      const { configPath } = data;
       // eslint-disable-next-line prefer-destructuring
       darkMode = config.darkMode;
       // eslint-disable-next-line prefer-destructuring
@@ -165,8 +165,13 @@ ipcRenderer.on(
   'fromBackend',
   (event: Electron.IpcRendererEvent, message: any) => {
     const { data, messageType } = message;
-
     switch (messageType) {
+      case 'handleLedgerImport':
+        handleLedgerImport();
+        break;
+      case 'ledgerPrompt':
+        checkLedgerPrompt();
+        break;
       case 'authenticationError':
         handleAuthenticationError(data);
         break;
@@ -401,15 +406,24 @@ eventEmitter.on('getUpdate', () => {
   remote.app.exit();
 });
 
-ipcRenderer.on('handleLedger', () => {
+const handleLedgerImport = () => {
+  eventEmitter.emit('importLedger');
+};
+
+const checkLedgerPrompt = () => {
   const message = (
     <p className={`subtitle ${textColor}`}>
-      Please check your Ledger and enter the PIN when prompted.
+      Please follow the prompts on your ledger.
     </p>
   );
-
   eventEmitter.emit('openModal', message, 'OK', null, null);
-});
+};
+
+ipcRenderer.on('handleLedgerImport', handleLedgerImport);
+
+ipcRenderer.on('handleLedger', checkLedgerPrompt);
+ipcRenderer.on('ledgerPrompt', checkLedgerPrompt);
+eventEmitter.on('ledgerPrompt', checkLedgerPrompt);
 
 ipcRenderer.on('handleLock', () => {
   if (session && loginCounter.isLoggedIn && session.walletPassword !== '') {

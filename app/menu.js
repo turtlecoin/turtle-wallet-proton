@@ -105,6 +105,12 @@ export default class MenuBuilder {
           }
         },
         {
+          label: 'Import From Ledger',
+          click: () => {
+            this.handleLedgerImport();
+          }
+        },
+        {
           label: il8n.save,
           accelerator: 'Command+S',
           click: () => {
@@ -354,8 +360,7 @@ export default class MenuBuilder {
   }
 
   handleLedgerImport() {
-    this.mainWindow.webContents.send('handleLedger');
-    messageRelayer.sendToBackend('handleLedger');
+    this.mainWindow.webContents.send('handleLedgerImport');
   }
 
   buildDefaultTemplate() {
@@ -381,6 +386,12 @@ export default class MenuBuilder {
             label: il8n.restore,
             click: () => {
               this.handleRestore();
+            }
+          },
+          {
+            label: 'Import from Ledger',
+            click: () => {
+              this.handleLedgerImport();
             }
           },
           {
@@ -425,12 +436,6 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+L',
             click: () => {
               this.handleLock();
-            }
-          },
-          {
-            label: 'Open from Ledger',
-            click: () => {
-              this.handleLedgerImport();
             }
           }
         ]

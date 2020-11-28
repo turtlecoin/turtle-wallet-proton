@@ -16,6 +16,7 @@ import ChangePasswordPage from './containers/ChangePasswordPage';
 import FirstStartupPage from './containers/FirstStartupPage';
 import AddressBookPage from './containers/AddressBookPage';
 import SearchPage from './containers/SearchPage';
+import ImportLedgerPage from './containers/ImportLedgerPage';
 import NewWalletPage from './containers/NewWalletPage';
 
 export default () => (
@@ -27,6 +28,7 @@ export default () => (
       <Route path="/search/:query?" component={SearchPage} />
       <Route exact path={routes.IMPORT} component={ImportPage} />
       <Route exact path={routes.IMPORTKEY} component={ImportKeyPage} />
+      <Route exact path={routes.IMPORTLEDGER} component={ImportLedgerPage} />
       <Route exact path={routes.SETTINGS} component={SettingsPage} />
       <Route exact path={routes.LOGIN} component={LoginPage} />
       <Route exact path={routes.FIRSTSTARTUP} component={FirstStartupPage} />
