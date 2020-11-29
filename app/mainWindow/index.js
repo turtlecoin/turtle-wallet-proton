@@ -52,7 +52,7 @@ export const il8n = new LocalizedStrings({
     fr: require("./il8n/fr.json")
 });
 
-export const config = iConfig;
+export let config = iConfig;
 export let configManager = null;
 
 export const eventEmitter = new EventEmitter();
@@ -145,18 +145,22 @@ eventEmitter.on("updateRequired", updateFile => {
 });
 
 ipcRenderer.on("fromMain", (event: Electron.IpcRendererEvent, message: any) => {
+    log.info("THIS IS WHAT I'M LOKING AT", message);
     const { data, messageType } = message;
     switch (messageType) {
         case "config":
-            const { config } = data;
+            if (!data.config) {
+              log.info("Received fucked up config!");
+              break;
+            }
 
-            const { configPath } = data;
+            config = data.config;
             // eslint-disable-next-line prefer-destructuring
-            darkMode = config.darkMode;
+            darkMode = data.config.darkMode;
             // eslint-disable-next-line prefer-destructuring
-            textColor = uiType(darkMode).textColor;
-            configManager = new ProtonConfig(config, configPath);
-            reInitWallet(config.walletFile);
+            textColor = uiType(data.config.darkMode).textColor;
+            configManager = new ProtonConfig(data.config, data.configPath);
+            reInitWallet(data.config.walletFile);
             ipcRenderer.send("frontReady");
             break;
         default:

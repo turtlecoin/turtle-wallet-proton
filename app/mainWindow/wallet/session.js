@@ -36,7 +36,7 @@ export default class WalletSession {
     daemonConnectionInfo: DaemonConnection = {
         daemonType: 1,
         daemonTypeDetermined: true,
-        host: "turtle.imhard4.men",
+        host: "",
         port: 11898,
         ssl: false,
         sslDetermined: false

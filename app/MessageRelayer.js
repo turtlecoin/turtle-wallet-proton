@@ -2,6 +2,7 @@
 //
 // Please see the included LICENSE file for more information.
 import { ipcMain, IpcMainEvent } from "electron";
+import log from "electron-log";
 
 export default class MessageRelayer {
     mainWindow: BrowserWindow;

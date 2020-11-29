@@ -163,7 +163,6 @@ const configure = {
      * Default daemon to use. Can either be a BlockchainCacheApi(baseURL, SSL),
      * or a ConventionalDaemon(url, port).
      */
-    defaultDaemon: new Daemon("turtle.imhard4.men", 11898),
 
     /**
      * A url to fetch node info from. Should follow the turtlepay format

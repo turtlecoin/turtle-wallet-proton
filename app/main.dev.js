@@ -88,11 +88,15 @@ if (fs.existsSync(`${programDirectory}/config.json`)) {
     configReady = true;
     if (frontendReady && backendReady) windowEvents.emit("bothWindowsReady");
 } else {
+    log.info("Creating new config.");
     config = iConfig;
     config.darkMode = systemPreferences.isDarkMode();
     configReady = true;
     if (frontendReady && backendReady) windowEvents.emit("bothWindowsReady");
 }
+
+log.info("Config finished loading in main thread. Current contents:");
+log.info(config);
 
 if (fs.existsSync(`${programDirectory}/addressBook.json`)) {
     const rawAddressBook = fs
@@ -209,6 +213,7 @@ contextMenu({
             role: "cut",
             enabled: false,
             visible:
+                os.platform() !== "darwin" &&
                 params.linkURL.includes("#addressinput") &&
                 params.inputFieldType !== "plainText"
         },
@@ -217,6 +222,7 @@ contextMenu({
             role: "copy",
             enabled: false,
             visible:
+                os.platform() !== "darwin" &&
                 params.linkURL.includes("#addressinput") &&
                 params.inputFieldType !== "plainText"
         },
@@ -224,6 +230,7 @@ contextMenu({
             label: "Paste",
             role: "paste",
             visible:
+                os.platform() !== "darwin" &&
                 params.linkURL.includes("#addressinput") &&
                 params.inputFieldType !== "plainText"
         }
@@ -275,7 +282,6 @@ app.on("ready", async () => {
                 {
                     label: "Quit",
                     click() {
-                        log.info("reached");
                         messageRelayer.sendToBackend("stopRequest");
                         isQuitting = true;
                         quitTimeout = setTimeout(app.exit, 1000 * 10);
