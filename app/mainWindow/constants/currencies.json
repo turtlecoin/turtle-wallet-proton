@@ -1,114 +1,114 @@
 [
-  {
-    "ticker": "btc",
-    "coinName": "Bitcoin",
-    "symbol": "₿",
-    "symbolLocation": "prefix",
-    "decimals": "8"
-  },
-  {
-    "ticker": "eth",
-    "coinName": "Ethereum",
-    "symbol": "Ξ",
-    "symbolLocation": "prefix",
-    "decimals": "18"
-  },
-  {
-    "ticker": "ltc",
-    "coinName": "Litecoin",
-    "symbol": "Ł",
-    "symbolLocation": "prefix",
-    "decimals": "8"
-  },
-  {
-    "ticker": "aud",
-    "coinName": "Australian Dollar",
-    "symbol": "$",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "cad",
-    "coinName": "Canadian Dollar",
-    "symbol": "$",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "cny",
-    "coinName": "Chinese Yuan Renminbi",
-    "symbol": "¥",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "chf",
-    "coinName": "Swiss Franc",
-    "symbol": "Fr",
-    "symbolLocation": "suffix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "eur",
-    "coinName": "Euro",
-    "symbol": "€",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "gbp",
-    "coinName": "Great British Pound",
-    "symbol": "£",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "inr",
-    "coinName": "Indian Rupee",
-    "symbol": "₹",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "jpy",
-    "coinName": "Japanese Yen",
-    "symbol": "¥",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "mxn",
-    "coinName": "Mexican Peso",
-    "symbol": "$",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "nzd",
-    "coinName": "New Zealand Dollar",
-    "symbol": "$",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "rub",
-    "coinName": "Russian Ruble",
-    "symbol": "₽",
-    "symbolLocation": "suffix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "sek",
-    "coinName": "Swedish Kronor",
-    "symbol": "kr",
-    "symbolLocation": "suffix",
-    "decimals": "2"
-  },
-  {
-    "ticker": "usd",
-    "coinName": "United States Dollar",
-    "symbol": "$",
-    "symbolLocation": "prefix",
-    "decimals": "2"
-  }
+    {
+        "ticker": "btc",
+        "coinName": "Bitcoin",
+        "symbol": "₿",
+        "symbolLocation": "prefix",
+        "decimals": "8"
+    },
+    {
+        "ticker": "eth",
+        "coinName": "Ethereum",
+        "symbol": "Ξ",
+        "symbolLocation": "prefix",
+        "decimals": "18"
+    },
+    {
+        "ticker": "ltc",
+        "coinName": "Litecoin",
+        "symbol": "Ł",
+        "symbolLocation": "prefix",
+        "decimals": "8"
+    },
+    {
+        "ticker": "aud",
+        "coinName": "Australian Dollar",
+        "symbol": "$",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "cad",
+        "coinName": "Canadian Dollar",
+        "symbol": "$",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "cny",
+        "coinName": "Chinese Yuan Renminbi",
+        "symbol": "¥",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "chf",
+        "coinName": "Swiss Franc",
+        "symbol": "Fr",
+        "symbolLocation": "suffix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "eur",
+        "coinName": "Euro",
+        "symbol": "€",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "gbp",
+        "coinName": "Great British Pound",
+        "symbol": "£",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "inr",
+        "coinName": "Indian Rupee",
+        "symbol": "₹",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "jpy",
+        "coinName": "Japanese Yen",
+        "symbol": "¥",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "mxn",
+        "coinName": "Mexican Peso",
+        "symbol": "$",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "nzd",
+        "coinName": "New Zealand Dollar",
+        "symbol": "$",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "rub",
+        "coinName": "Russian Ruble",
+        "symbol": "₽",
+        "symbolLocation": "suffix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "sek",
+        "coinName": "Swedish Kronor",
+        "symbol": "kr",
+        "symbolLocation": "suffix",
+        "decimals": "2"
+    },
+    {
+        "ticker": "usd",
+        "coinName": "United States Dollar",
+        "symbol": "$",
+        "symbolLocation": "prefix",
+        "decimals": "2"
+    }
 ]

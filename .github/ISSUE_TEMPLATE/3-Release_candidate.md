@@ -1,7 +1,7 @@
 ---
 name: Release candidate
 about: Open a new RC checklist issue.
-labels: 'release candidate'
+labels: "release candidate"
 ---
 
 # Release Candidate
@@ -12,159 +12,159 @@ labels: 'release candidate'
 
 ## Creation
 
-- [ ] Loads the internal config when local config not present
+-   [ ] Loads the internal config when local config not present
 
-- [ ] Can create a wallet
+-   [ ] Can create a wallet
 
-- [ ] Can import a wallet with keys
+-   [ ] Can import a wallet with keys
 
-- [ ] Can import a wallet with seed
+-   [ ] Can import a wallet with seed
 
-- [ ] Import scan height exact height works
+-   [ ] Import scan height exact height works
 
 ## Wallet
 
 ### General Operation
 
-- [ ] Wallet can sync
+-   [ ] Wallet can sync
 
-- [ ] Wallet can receive a transaction
+-   [ ] Wallet can receive a transaction
 
-- [ ] Coin price is loaded from API
+-   [ ] Coin price is loaded from API
 
-- [ ] Notifications are received when transaction is received (if enabled)
+-   [ ] Notifications are received when transaction is received (if enabled)
 
-- [ ] Wallet sync process is saved on close
+-   [ ] Wallet sync process is saved on close
 
-- [ ] Can login with password
+-   [ ] Can login with password
 
-- [ ] Lock button works
+-   [ ] Lock button works
 
-- [ ] Lock button only shows up when password enabled
+-   [ ] Lock button only shows up when password enabled
 
-- [ ] All operations in the native menus work
+-   [ ] All operations in the native menus work
 
-- [ ] Operations in the native menu that should require login do not work unless logged in
+-   [ ] Operations in the native menu that should require login do not work unless logged in
 
-- [ ] Changing password works
+-   [ ] Changing password works
 
 ### Backup
 
-- [ ] Seed is not displayed when wallet is not mnemonic
+-   [ ] Seed is not displayed when wallet is not mnemonic
 
 ### Transferring
 
-- [ ] Wallet can send a transaction
+-   [ ] Wallet can send a transaction
 
-- [ ] Balance is correctly locked after transaction
+-   [ ] Balance is correctly locked after transaction
 
-- [ ] Cannot send negative amount
+-   [ ] Cannot send negative amount
 
-- [ ] Network fee is correctly displayed
+-   [ ] Network fee is correctly displayed
 
-- [ ] Receiver receives transaction
+-   [ ] Receiver receives transaction
 
 ## Transactions Screen
 
-- [ ] Incoming transactions are displayed
+-   [ ] Incoming transactions are displayed
 
-- [ ] Outgoing transactions are displayed
+-   [ ] Outgoing transactions are displayed
 
-- [ ] Transaction extended details are correct
+-   [ ] Transaction extended details are correct
 
-- [ ] Can view transaction on block explorer
+-   [ ] Can view transaction on block explorer
 
-- [ ] Timestamps of transactions are correct
+-   [ ] Timestamps of transactions are correct
 
 ## Send Screen
 
-- [ ] Send all works
+-   [ ] Send all works
 
-- [ ] Generate random payment ID works
+-   [ ] Generate random payment ID works
 
 ## Receive Screen
 
-- [ ] Copy to clipboard works
+-   [ ] Copy to clipboard works
 
-- [ ] Generate integrated address works
+-   [ ] Generate integrated address works
 
-- [ ] Defining a custom payment ID and generating integrated address works
+-   [ ] Defining a custom payment ID and generating integrated address works
 
 ## Address Book Screen
 
-- [ ] Can add a contact via address book screen
+-   [ ] Can add a contact via address book screen
 
-- [ ] Cannot create an existing contact
+-   [ ] Cannot create an existing contact
 
-- [ ] Contacts are retained after closing application
+-   [ ] Contacts are retained after closing application
 
-- [ ] Can send to specific contact from address book screen (paper plane icon)
+-   [ ] Can send to specific contact from address book screen (paper plane icon)
 
-- [ ] Can delete contact
+-   [ ] Can delete contact
 
 ## Terminal Screen
 
-- [ ] Displays backend log if loglevel is not DISABLED
+-   [ ] Displays backend log if loglevel is not DISABLED
 
-- [ ] Displays TurtleCoind log output if a log file is selected and tail is enabled
+-   [ ] Displays TurtleCoind log output if a log file is selected and tail is enabled
 
 ## Search Screen (access by searching at the top right)
 
-- [ ] Can search for an address book contact
+-   [ ] Can search for an address book contact
 
-- [ ] Can search for transaction hash
+-   [ ] Can search for transaction hash
 
-- [ ] Can search for a payment ID
+-   [ ] Can search for a payment ID
 
-- [ ] Can search for a block height
+-   [ ] Can search for a block height
 
-- [ ] Can search for settings **(if some keyword does not turn up a result you'd expect, please let me know so I can add it as a keyword)**
+-   [ ] Can search for settings **(if some keyword does not turn up a result you'd expect, please let me know so I can add it as a keyword)**
 
 ## Settings
 
-- [ ] Preferences are loaded when closing/reopening
+-   [ ] Preferences are loaded when closing/reopening
 
-- [ ] Wallet remembers last settings page and opens it again (unless navigating from searched setting)
+-   [ ] Wallet remembers last settings page and opens it again (unless navigating from searched setting)
 
 ### Node Settings
 
-- [ ] Changing node works
+-   [ ] Changing node works
 
-- [ ] Tailing turtlecoind log file works
+-   [ ] Tailing turtlecoind log file works
 
 ### Wallet Settings
 
-- [ ] Reset from scan height works
+-   [ ] Reset from scan height works
 
-- [ ] Reset from scan height of zero works
+-   [ ] Reset from scan height of zero works
 
-- [ ] Scan coinbase transaction toggle works
+-   [ ] Scan coinbase transaction toggle works
 
-- [ ] Changing walletbackend loglevel works
+-   [ ] Changing walletbackend loglevel works
 
 ### Display Settings
 
-- [ ] Currency swapping works correctly (click your balance to toggle currencies)
+-   [ ] Currency swapping works correctly (click your balance to toggle currencies)
 
-- [ ] Light mode works
+-   [ ] Light mode works
 
-- [ ] Dark mode works
+-   [ ] Dark mode works
 
 ### Security Settings
 
-- [ ] Setting autolock interval works
+-   [ ] Setting autolock interval works
 
-- [ ] Disabling autolock works
+-   [ ] Disabling autolock works
 
-- [ ] Backup button triggers backup modal
+-   [ ] Backup button triggers backup modal
 
-- [ ] Change wallet password navigates to change password screen
+-   [ ] Change wallet password navigates to change password screen
 
 ## Platform Settings
 
-- [ ] Disabling notifications works correctly
+-   [ ] Disabling notifications works correctly
 
-- [ ] Close to tray toggle works
+-   [ ] Close to tray toggle works
 
 ```text
 Template (c) zpalmtree 2019-2019, (c) ExtraHash 2019-2019

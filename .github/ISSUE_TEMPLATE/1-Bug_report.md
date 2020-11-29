@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: You're having technical issues.
-labels: 'bug'
+labels: "bug"
 ---
 
 <!-- Please use the following issue template. -->
@@ -40,5 +40,5 @@ labels: 'bug'
 
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-- Version used :
-- Operating System and version :
+-   Version used :
+-   Operating System and version :

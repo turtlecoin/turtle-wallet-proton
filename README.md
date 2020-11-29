@@ -28,11 +28,11 @@
 
 #### You will need the following dependencies installed before you can proceed to the "Setup" step:
 
-- Node.JS (latest LTS 14.x) https://nodejs.org/
+-   Node.JS (latest LTS 14.x) https://nodejs.org/
 
-- Yarn https://yarnpkg.com/en/
+-   Yarn https://yarnpkg.com/en/
 
-- Git https://git-scm.com/downloads
+-   Git https://git-scm.com/downloads
 
 Tip: If you already have a different version of node.js installed besides 14.x, try using [Node Version Manager](https://github.com/nvm-sh/nvm#install--update-script).
 

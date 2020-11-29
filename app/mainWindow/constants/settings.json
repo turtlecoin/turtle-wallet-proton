@@ -1,146 +1,146 @@
 [
-  {
-    "settingName": "Node Settings",
-    "location": "node",
-    "description": "All settings related to the remote / local node",
-    "keywords": ""
-  },
-  {
-    "settingName": "Remote Node",
-    "location": "node",
-    "description": "Change what remote node you're connected to",
-    "keywords": ""
-  },
-  {
-    "settingName": "Wallet Settings",
-    "location": "scan",
-    "description": "All settings related to the wallet itself",
-    "keywords": ""
-  },
-  {
-    "settingName": "Rescan Wallet",
-    "location": "scan",
-    "description": "Rescan your wallet from a specified block",
-    "keywords": ""
-  },
-  {
-    "settingName": "Scan Coinbase Transactions",
-    "location": "scan",
-    "description": "Turn on or off coinbase transaction scanning (turn on if you've solo mined)",
-    "keywords": ""
-  },
-  {
-    "settingName": "WalletBackend Log Level",
-    "location": "scan",
-    "description": "Adjust the log level for walletbackend-js, useful for debugging",
-    "keywords": ""
-  },
-  {
-    "settingName": "Display Settings",
-    "location": "display",
-    "description": "All settings related to the wallet itself",
-    "keywords": ""
-  },
-  {
-    "settingName": "Alternate Display Currency",
-    "location": "display",
-    "description": "Set which fiat currency you'd like to use",
-    "keywords": ""
-  },
-  {
-    "settingName": "Dark Mode",
-    "location": "display",
-    "description": "Turn on or off dark mode",
-    "keywords": "theme"
-  },
-  {
-    "settingName": "Security Settings",
-    "location": "security",
-    "description": "All settings related to the security of your wallet",
-    "keywords": ""
-  },
-  {
-    "settingName": "Autolock Time Interval",
-    "location": "security",
-    "description": "Set the time it takes in minutes for your wallet to lock itself",
-    "keywords": ""
-  },
-  {
-    "settingName": "Inactivity Autolock",
-    "location": "security",
-    "description": "Disable or enable automatic locking",
-    "keywords": ""
-  },
-  {
-    "settingName": "Change Wallet Password",
-    "location": "/changepassword",
-    "description": "Change your wallet password",
-    "keywords": "change password"
-  },
-  {
-    "settingName": "Backup",
-    "location": ".handleBackup",
-    "description": "Back up your private keys or mnemonic seed",
-    "keywords": "key seed back up paper wallet"
-  },
-  {
-    "settingName": "OS Settings",
-    "location": "platform",
-    "description": "All of the settings for your specific operating system",
-    "keywords": "windows macos linux"
-  },
-  {
-    "settingName": "Close To Tray",
-    "location": "platform",
-    "description": "Enable or disable closing to tray",
-    "keywords": ""
-  },
-  {
-    "settingName": "Notifications",
-    "location": "platform",
-    "description": "Enable or disable OS notifications",
-    "keywords": ""
-  },
-  {
-    "settingName": "Import Key",
-    "location": "/importkey",
-    "description": "Import a wallet from a private spendkey and a private viewkey",
-    "keywords": "restore key seed"
-  },
-  {
-    "settingName": "Import Seed",
-    "location": "/import",
-    "description": "Import a wallet from a mnenomic seed",
-    "keywords": "restore key seed"
-  },
-  {
-    "settingName": "Support",
-    "location": ".handleHelp",
-    "description": "Need help? Join our Discord for support",
-    "keywords": "help"
-  },
-  {
-    "settingName": "About",
-    "location": ".handleAbout",
-    "description": "View the readme for TurtleCoin Wallet",
-    "keywords": ""
-  },
-  {
-    "settingName": "Report Bug",
-    "location": ".handleIssues",
-    "description": "Report a bug to us on GitHub",
-    "keywords": "error"
-  },
-  {
-    "settingName": "Request Feature",
-    "location": ".handleIssues",
-    "description": "Make a feature request for TurtleCoin Wallet",
-    "keywords": ""
-  },
-  {
-    "settingName": "Donate",
-    "location": ".goToDonate",
-    "description": "Like TurtleCoin Wallet? Consider donating to support its development",
-    "keywords": "donate developer"
-  }
+    {
+        "settingName": "Node Settings",
+        "location": "node",
+        "description": "All settings related to the remote / local node",
+        "keywords": ""
+    },
+    {
+        "settingName": "Remote Node",
+        "location": "node",
+        "description": "Change what remote node you're connected to",
+        "keywords": ""
+    },
+    {
+        "settingName": "Wallet Settings",
+        "location": "scan",
+        "description": "All settings related to the wallet itself",
+        "keywords": ""
+    },
+    {
+        "settingName": "Rescan Wallet",
+        "location": "scan",
+        "description": "Rescan your wallet from a specified block",
+        "keywords": ""
+    },
+    {
+        "settingName": "Scan Coinbase Transactions",
+        "location": "scan",
+        "description": "Turn on or off coinbase transaction scanning (turn on if you've solo mined)",
+        "keywords": ""
+    },
+    {
+        "settingName": "WalletBackend Log Level",
+        "location": "scan",
+        "description": "Adjust the log level for walletbackend-js, useful for debugging",
+        "keywords": ""
+    },
+    {
+        "settingName": "Display Settings",
+        "location": "display",
+        "description": "All settings related to the wallet itself",
+        "keywords": ""
+    },
+    {
+        "settingName": "Alternate Display Currency",
+        "location": "display",
+        "description": "Set which fiat currency you'd like to use",
+        "keywords": ""
+    },
+    {
+        "settingName": "Dark Mode",
+        "location": "display",
+        "description": "Turn on or off dark mode",
+        "keywords": "theme"
+    },
+    {
+        "settingName": "Security Settings",
+        "location": "security",
+        "description": "All settings related to the security of your wallet",
+        "keywords": ""
+    },
+    {
+        "settingName": "Autolock Time Interval",
+        "location": "security",
+        "description": "Set the time it takes in minutes for your wallet to lock itself",
+        "keywords": ""
+    },
+    {
+        "settingName": "Inactivity Autolock",
+        "location": "security",
+        "description": "Disable or enable automatic locking",
+        "keywords": ""
+    },
+    {
+        "settingName": "Change Wallet Password",
+        "location": "/changepassword",
+        "description": "Change your wallet password",
+        "keywords": "change password"
+    },
+    {
+        "settingName": "Backup",
+        "location": ".handleBackup",
+        "description": "Back up your private keys or mnemonic seed",
+        "keywords": "key seed back up paper wallet"
+    },
+    {
+        "settingName": "OS Settings",
+        "location": "platform",
+        "description": "All of the settings for your specific operating system",
+        "keywords": "windows macos linux"
+    },
+    {
+        "settingName": "Close To Tray",
+        "location": "platform",
+        "description": "Enable or disable closing to tray",
+        "keywords": ""
+    },
+    {
+        "settingName": "Notifications",
+        "location": "platform",
+        "description": "Enable or disable OS notifications",
+        "keywords": ""
+    },
+    {
+        "settingName": "Import Key",
+        "location": "/importkey",
+        "description": "Import a wallet from a private spendkey and a private viewkey",
+        "keywords": "restore key seed"
+    },
+    {
+        "settingName": "Import Seed",
+        "location": "/import",
+        "description": "Import a wallet from a mnenomic seed",
+        "keywords": "restore key seed"
+    },
+    {
+        "settingName": "Support",
+        "location": ".handleHelp",
+        "description": "Need help? Join our Discord for support",
+        "keywords": "help"
+    },
+    {
+        "settingName": "About",
+        "location": ".handleAbout",
+        "description": "View the readme for TurtleCoin Wallet",
+        "keywords": ""
+    },
+    {
+        "settingName": "Report Bug",
+        "location": ".handleIssues",
+        "description": "Report a bug to us on GitHub",
+        "keywords": "error"
+    },
+    {
+        "settingName": "Request Feature",
+        "location": ".handleIssues",
+        "description": "Make a feature request for TurtleCoin Wallet",
+        "keywords": ""
+    },
+    {
+        "settingName": "Donate",
+        "location": ".goToDonate",
+        "description": "Like TurtleCoin Wallet? Consider donating to support its development",
+        "keywords": "donate developer"
+    }
 ]

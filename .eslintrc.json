@@ -1,32 +1,32 @@
 {
-  "extends": "erb",
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "configs/webpack.config.eslint.js"
-      }
+    "parser": "babel-eslint",
+    "settings": {
+        "import/resolver": {
+            "webpack": {
+                "config": "configs/webpack.config.eslint.js"
+            }
+        }
+    },
+    "plugins": [],
+    "rules": {
+        "import/no-mutable-exports": "off",
+        "class-methods-use-this": "off",
+        "jsx-a11y/label-has-for": "off",
+        "no-plusplus": "off",
+        "no-restricted-syntax": [
+            "error",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ],
+        "react/button-has-type": [
+            true,
+            { "button": true, "submit": true, "reset": true }
+        ],
+        "react/no-array-index-key": false,
+        "global-require": 0,
+        "flowtype/no-weak-types": "off",
+        "import/prefer-default-export": false,
+        "import/no-cycle": "off"
     }
-  },
-  "plugins": ["header"],
-  "rules": {
-    "import/no-mutable-exports": "off",
-    "class-methods-use-this": "off",
-    "jsx-a11y/label-has-for": "off",
-    "no-plusplus": "off",
-    "no-restricted-syntax": [
-      "error",
-      "ForInStatement",
-      "LabeledStatement",
-      "WithStatement"
-    ],
-    "react/button-has-type": [
-      true,
-      { "button": true, "submit": true, "reset": true }
-    ],
-    "react/no-array-index-key": false,
-    "global-require": 0,
-    "flowtype/no-weak-types": "off",
-    "import/prefer-default-export": false,
-    "import/no-cycle": "off"
-  }
 }

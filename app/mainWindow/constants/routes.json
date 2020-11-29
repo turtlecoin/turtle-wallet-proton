@@ -1,15 +1,15 @@
 {
-  "HOME": "/",
-  "RECEIVE": "/receive",
-  "SEND": "/send",
-  "IMPORT": "/import",
-  "IMPORTKEY": "/importkey",
-  "SETTINGS": "/settings",
-  "LOGIN": "/login",
-  "IMPORTLEDGER": "/importledger",
-  "CHANGEPASSWORD": "/changepassword",
-  "FIRSTSTARTUP": "/firststartup",
-  "TERMINAL": "/terminal",
-  "ADDRESSBOOK": "/addressbook",
-  "NEWWALLET": "/newwallet"
+    "HOME": "/",
+    "RECEIVE": "/receive",
+    "SEND": "/send",
+    "IMPORT": "/import",
+    "IMPORTKEY": "/importkey",
+    "SETTINGS": "/settings",
+    "LOGIN": "/login",
+    "IMPORTLEDGER": "/importledger",
+    "CHANGEPASSWORD": "/changepassword",
+    "FIRSTSTARTUP": "/firststartup",
+    "TERMINAL": "/terminal",
+    "ADDRESSBOOK": "/addressbook",
+    "NEWWALLET": "/newwallet"
 }
