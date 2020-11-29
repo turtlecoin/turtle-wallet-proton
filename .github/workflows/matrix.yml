@@ -22,7 +22,7 @@ jobs:
 
       - name: Setup MSBuild.exe
         if: matrix.os == 'windows-latest'
-        uses: warrenbuckley/Setup-MSBuild@v1
+        uses: microsoft/setup-msbuild@v1
 
       - name: Setup Cache
         uses: actions/cache@v1
