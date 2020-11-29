@@ -31,7 +31,7 @@ jobs:
           key: ${{ matrix.os }}-deps
 
       - name: Dependencies
-        run: yarn
+        run: yarn --network-concurrency 1
 
       - name: Build
         run: yarn package
