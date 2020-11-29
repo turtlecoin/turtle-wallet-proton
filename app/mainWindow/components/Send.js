@@ -38,7 +38,6 @@ type State = {
     paymentID: string,
     darkMode: boolean,
     transactionInProgress: boolean,
-    displayCurrency: string,
     fiatPrice: number,
     fiatSymbol: string,
     symbolLocation: string,
@@ -91,7 +90,6 @@ export default class Send extends Component<Props, State> {
             paymentID: props.uriPaymentID || "",
             darkMode: config.darkMode,
             transactionInProgress: false,
-            displayCurrency: config.displayCurrency,
             fiatPrice: session.fiatPrice,
             fiatSymbol: config.fiatSymbol,
             symbolLocation: config.symbolLocation,
@@ -139,7 +137,6 @@ export default class Send extends Component<Props, State> {
         eventEmitter.on("transactionCancel", this.handleTransactionCancel);
         eventEmitter.on("gotFiatPrice", this.updateFiatPrice);
         eventEmitter.on("gotNodeFee", this.handleNewNodeFee);
-        eventEmitter.on("modifyCurrency", this.modifyCurrency);
         ipcRenderer.on("handleDonate", this.handleDonate);
         ipcRenderer.on("fromBackend", this.handleBackendMessages);
         // eslint-disable-next-line react/destructuring-assignment
@@ -166,17 +163,9 @@ export default class Send extends Component<Props, State> {
         eventEmitter.off("transactionCancel", this.handleTransactionCancel);
         eventEmitter.off("gotFiatPrice", this.updateFiatPrice);
         eventEmitter.off("gotNodeFee", this.handleNewNodeFee);
-        eventEmitter.off("modifyCurrency", this.modifyCurrency);
         ipcRenderer.off("handleDonate", this.handleDonate);
         ipcRenderer.off("fromBackend", this.handleBackendMessages);
     }
-
-    modifyCurrency = (displayCurrency: string) => {
-        this.setState({
-            displayCurrency
-        });
-        this.resetAmounts();
-    };
 
     updateFiatPrice = (fiatPrice: number) => {
         this.setState({
@@ -315,7 +304,6 @@ export default class Send extends Component<Props, State> {
             sendToAddress,
             paymentID,
             darkMode,
-            displayCurrency,
             enteredAmount,
             fiatPrice,
             sendAll
@@ -385,15 +373,7 @@ export default class Send extends Component<Props, State> {
 
         const transactionData = {
             address: sendToAddress,
-            amount:
-                displayCurrency === Configure.ticker
-                    ? Number(enteredAmount) * 10 ** Configure.decimalPlaces
-                    : parseInt(
-                          (Number(enteredAmount) *
-                              10 ** Configure.decimalPlaces) /
-                              fiatPrice,
-                          10
-                      ),
+            amount: Number(enteredAmount) * 10 ** Configure.decimalPlaces,
             paymentID,
             sendAll
         };
@@ -450,7 +430,6 @@ export default class Send extends Component<Props, State> {
         const {
             unlockedBalance,
             fiatPrice,
-            displayCurrency,
             nodeFee
         } = this.state;
 
@@ -461,10 +440,7 @@ export default class Send extends Component<Props, State> {
                 ? 0
                 : totalAmount - parseInt(nodeFee, 10);
         this.setState({
-            enteredAmount:
-                displayCurrency === Configure.ticker
-                    ? atomicToHuman(enteredAmount, false).toString()
-                    : atomicToHuman(enteredAmount * fiatPrice, false).toString()
+            enteredAmount: atomicToHuman(enteredAmount, false).toString()
         });
     };
 
@@ -519,7 +495,6 @@ export default class Send extends Component<Props, State> {
             enteredAmount,
             paymentID,
             transactionInProgress,
-            displayCurrency,
             fiatSymbol,
             symbolLocation,
             sendToAddress,
@@ -528,11 +503,6 @@ export default class Send extends Component<Props, State> {
             menuIsOpen,
             sendAll
         } = this.state;
-
-        const exampleAmount =
-            symbolLocation === "prefix"
-                ? `${fiatSymbol}100`
-                : `100${fiatSymbol}`;
 
         const {
             backgroundColor,
@@ -632,13 +602,7 @@ export default class Send extends Component<Props, State> {
                                             placeholder={
                                                 sendAll
                                                     ? "Sending entire wallet balance "
-                                                    : `How much to send (eg. ${
-                                                          displayCurrency ===
-                                                          "fiat"
-                                                              ? exampleAmount
-                                                              : "1000 " +
-                                                                Configure.ticker
-                                                      })`
+                                                    : `How much to send (eg. 1000 ${Configure.ticker})`
                                             }
                                             value={enteredAmount}
                                             onChange={this.handleAmountChange}

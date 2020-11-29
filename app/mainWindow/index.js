@@ -145,7 +145,6 @@ eventEmitter.on("updateRequired", updateFile => {
 });
 
 ipcRenderer.on("fromMain", (event: Electron.IpcRendererEvent, message: any) => {
-    log.info("THIS IS WHAT I'M LOKING AT", message);
     const { data, messageType } = message;
     switch (messageType) {
         case "config":
