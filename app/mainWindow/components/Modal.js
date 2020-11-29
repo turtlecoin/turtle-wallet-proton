@@ -40,10 +40,12 @@ export default class Modal extends Component<Props, State> {
 
     componentWillMount() {
         eventEmitter.on("openModal", this.openModal);
+        eventEmitter.on("closeModal", this.closeModal);
     }
 
     componentWillUnmount() {
         eventEmitter.off("openModal", this.openModal);
+        eventEmitter.off("closeModal", this.closeModal);
     }
 
     closeModal = () => {

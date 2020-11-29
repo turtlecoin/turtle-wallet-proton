@@ -202,7 +202,7 @@ contextMenu({
             visible: params.selectionText.trim().length === 64,
             click: () => {
                 shell.openExternal(
-                    `${Configure.ExplorerURL}/?search=${encodeURIComponent(
+                    `${Configure.explorerURL}/?search=${encodeURIComponent(
                         params.selectionText
                     )}`
                 );

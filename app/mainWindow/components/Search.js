@@ -160,7 +160,7 @@ export default class Search extends Component<Props, States> {
         const { query } = this.state;
         remote.shell.openExternal(
             `${
-                Configure.ExplorerURL
+                Configure.explorerURL
             }/transaction.html?hash=${encodeURIComponent(query)}`
         );
     };
@@ -169,7 +169,7 @@ export default class Search extends Component<Props, States> {
         const hash = event.target.value;
         remote.shell.openExternal(
             `${
-                Configure.ExplorerURL
+                Configure.explorerURL
             }/transaction.html?hash=${encodeURIComponent(hash)}`
         );
     };

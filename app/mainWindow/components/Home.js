@@ -123,7 +123,7 @@ export default class Home extends Component<Props, State> {
 
         remote.shell.openExternal(
             `${
-                Configure.ExplorerURL
+                Configure.explorerURL
             }/transaction.html?hash=${encodeURIComponent(hash)}`
         );
     };

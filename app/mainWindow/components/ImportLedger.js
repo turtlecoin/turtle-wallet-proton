@@ -373,18 +373,7 @@ export default class ImportLedger extends Component<Props, State> {
                                             sensitive operations. Please enter
                                             the scan height for your ledger
                                             wallet. If this is a brand new
-                                            wallet, check the{" "}
-                                            <a
-                                                onClick={() => {
-                                                    shell.openExternal(
-                                                        "https://explorer.turtlecoin.lol/"
-                                                    );
-                                                }}
-                                                target="__blank"
-                                            >
-                                                block explorer
-                                            </a>{" "}
-                                            and enter the current block.
+                                            wallet, click the new wallet button.
                                         </p>
                                         <label
                                             className={`label ${textColor}`}

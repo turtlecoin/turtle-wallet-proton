@@ -168,11 +168,13 @@ const configure = {
 
     nodeListURL: "https://blockapi.turtlepay.io/node/list/online",
 
-    ExplorerURL: "https://explorer.turtlecoin.lol",
+    currentHeightURL: "https://blockapi.turtlepay.io/height",
 
-    GitHubRepo: "https://github.com/turtlecoin/turtle-wallet-proton",
+    explorerURL: "https://explorer.turtlecoin.lol",
 
-    DiscordURL: "https://discord.com/invite/ubFVGH6"
+    githubRepo: "https://github.com/turtlecoin/turtle-wallet-proton",
+
+    discordURL: "https://discord.com/invite/ubFVGH6"
 };
 
 export default configure;

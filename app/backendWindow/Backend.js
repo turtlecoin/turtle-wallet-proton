@@ -43,7 +43,7 @@ export default class Backend {
 
     transactionCount: number = 0;
 
-    ledgerOpen: boolean;
+    waitingOnLedger: boolean;
 
     saveInterval: IntervalID = setInterval(
         this.saveWallet.bind(this),
@@ -58,7 +58,7 @@ export default class Backend {
         this.walletFile = config.walletFile;
         this.logLevel = config.logLevel;
         this.daemon = new Daemon(this.daemonHost, this.daemonPort);
-        this.ledgerOpen = false;
+        this.waitingOnLedger = false;
     }
 
     setNotifications(status: boolean) {
@@ -509,6 +509,20 @@ export default class Backend {
                 });
             }
         });
+
+        this.wallet.on("user_confirm", () => {
+          log.info("Reached the confirm event");
+          this.waitingOnLedger = true;
+          this.send("ledgerPrompt");
+        })
+
+        this.wallet.on("transport_receive", (data) => {
+          if (this.waitingOnLedger) {
+            this.waitingOnLedger = false;
+            this.send("ledgerPromptClose");
+          }
+        })
+
         this.setWalletActive(true);
         this.send("syncStatus", this.wallet.getSyncStatus());
         this.send("primaryAddress", this.wallet.getPrimaryAddress());
@@ -575,7 +589,6 @@ export default class Backend {
         );
 
         if (!error) {
-            this.ledgerOpen = false;
             this.walletInit(openWallet);
         } else if (error.errorCode === WalletErrorCode.WRONG_PASSWORD) {
             this.send("authenticationStatus", false);
@@ -599,7 +612,6 @@ export default class Backend {
                 this.walletPassword,
                 { ...Configure, ledgerTransport: transport }
             );
-            this.ledgerOpen = true;
             this.walletInit(ledgerWallet);
         } else {
             error.errorString = error.toString();

@@ -179,6 +179,9 @@ ipcRenderer.on(
             case "ledgerPrompt":
                 checkLedgerPrompt();
                 break;
+            case "ledgerPromptClose":
+                eventEmitter.emit("closeModal");
+                break
             case "authenticationError":
                 handleAuthenticationError(data);
                 break;
@@ -518,15 +521,15 @@ ipcRenderer.on("handleOpen", handleOpen);
 eventEmitter.on("handleOpen", handleOpen);
 
 function handleAbout() {
-    remote.shell.openExternal(`${Configure.GitHubRepo}/issues#readme`);
+    remote.shell.openExternal(`${Configure.githubRepo}/issues#readme`);
 }
 
 function handleHelp() {
-    remote.shell.openExternal(`${Configure.DiscordURL}`);
+    remote.shell.openExternal(`${Configure.discordURL}`);
 }
 
 function handleIssues() {
-    remote.shell.openExternal(`${Configure.GitHubRepo}/issues`);
+    remote.shell.openExternal(`${Configure.githubRepo}/issues`);
 }
 
 eventEmitter.on("handleHelp", handleHelp);
