@@ -608,7 +608,7 @@ export default class Home extends Component<Props, State> {
                                 </div>
                             )}
                         {transactions !== undefined &&
-                            transactions.length > transactionCount && (
+                            transactions.length > displayedTransactionCount && (
                                 <form>
                                     <div className="field">
                                         <div className="buttons">

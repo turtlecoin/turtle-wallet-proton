@@ -19,8 +19,6 @@ type State = {
     connectionString: string,
     nodeChangeInProgress: boolean,
     ssl: boolean,
-    Selected_Node: string,
-    node_NewFee: number
 };
 
 export default class NodeChanger extends Component<Props, State> {
@@ -40,7 +38,6 @@ export default class NodeChanger extends Component<Props, State> {
             }`,
             nodeChangeInProgress: false,
             ssl: session.getDaemonConnectionInfo().ssl || false,
-            Selected_Node: Configure.defaultDaemon
         };
         this.changeNode = this.changeNode.bind(this);
         this.handleNodeInputChange = this.handleNodeInputChange.bind(this);
@@ -107,7 +104,6 @@ export default class NodeChanger extends Component<Props, State> {
         this.setState({
             nodeChangeInProgress: true,
             ssl: undefined,
-            node_NewFee: undefined
         });
     };
 
@@ -116,7 +112,6 @@ export default class NodeChanger extends Component<Props, State> {
             nodeChangeInProgress: false,
             connectionString: `${session.daemonHost}:${session.daemonPort}`,
             ssl: session.daemon.ssl,
-            node_NewFee: session.getNodeFee() || 0
         });
         log.debug(`Network Fee ${session.getNodeFee() || 0}`);
     };
@@ -131,9 +126,6 @@ export default class NodeChanger extends Component<Props, State> {
         const { textColor } = uiType(darkMode);
         // eslint-disable-next-line prefer-const
         let [host, port] = connectionString.split(":", 2);
-        if (port === undefined) {
-            port = Configure.DefaultDaemonRPCPort;
-        }
         /* if the daemon entered is the same as the
     one we're connected to, don't do anything */
         if (
@@ -176,8 +168,6 @@ export default class NodeChanger extends Component<Props, State> {
             nodeChangeInProgress,
             connectionString,
             ssl,
-            Selected_Node,
-            node_NewFee
         } = this.state;
         return (
             <form onSubmit={this.changeNode}>

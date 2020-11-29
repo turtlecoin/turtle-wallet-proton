@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
 import { remote, shell } from "electron";
 import log from "electron-log";
-import { WalletBackend } from "turtlecoin-wallet-backend";
+import { WalletBackend, Daemon } from "turtlecoin-wallet-backend";
 import NavBar from "./NavBar";
 import BottomBar from "./BottomBar";
 import Redirector from "./Redirector";
@@ -13,6 +13,8 @@ import { uiType } from "../utils/utils";
 import { eventEmitter, reInitWallet, config } from "../index";
 import Configure from "../../configure";
 import ReactLoading from "react-loading";
+import iConfig from "../constants/config.json";
+
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
 
@@ -167,7 +169,7 @@ export default class ImportLedger extends Component<Props, State> {
                 restoredWallet,
                 error
             ] = await WalletBackend.importWalletFromLedger(
-                Configure.defaultDaemon,
+                new Daemon(iConfig.daemonHost, iConfig.daemonPort),
                 Number(this.state.scanHeight),
                 {
                     ledgerTransport: transport
@@ -192,6 +194,7 @@ export default class ImportLedger extends Component<Props, State> {
                 eventEmitter.emit("openModal", message, "OK", null, null);
                 return;
             }
+
             this.setState({
                 importedWallet: restoredWallet,
                 waitingOnLedger: false

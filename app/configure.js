@@ -160,11 +160,6 @@ const configure = {
     priceApiLink: "https://api.coingecko.com/api/v3/simple/price",
 
     /**
-     * Default daemon to use. Can either be a BlockchainCacheApi(baseURL, SSL),
-     * or a ConventionalDaemon(url, port).
-     */
-
-    /**
      * A url to fetch node info from. Should follow the turtlepay format
      * detailed here: https://docs.turtlepay.io/blockapi/
      */

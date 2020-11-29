@@ -12,6 +12,7 @@ import Redirector from "./Redirector";
 import { uiType } from "../utils/utils";
 import { eventEmitter, reInitWallet, config } from "../index";
 import configure from "../../configure";
+import iConfig from "../constants/config.json";
 
 type State = {
     darkMode: boolean,
@@ -137,7 +138,7 @@ export default class ImportKey extends Component<Props, State> {
                 restoredWallet,
                 error
             ] = await WalletBackend.importWalletFromKeys(
-                Configure.defaultDaemon,
+                new Daemon(iConfig.daemonHost, iConfig.daemonPort),
                 scanHeight === "" ? 0 : Number(scanHeight),
                 privateViewKey,
                 privateSpendKey,

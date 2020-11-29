@@ -13,6 +13,7 @@ import BottomBar from "./BottomBar";
 import Redirector from "./Redirector";
 import { uiType } from "../utils/utils";
 import { backupToFile, eventEmitter, reInitWallet, config } from "../index";
+import iConfig from "../constants/config.json";
 
 type State = {
     darkMode: boolean,
@@ -59,7 +60,7 @@ export default class NewWallet extends Component<Props, State> {
     async componentWillMount() {
         try {
             const wallet = await WalletBackend.createWallet(
-                Configure.defaultDaemon,
+                new Daemon(iConfig.daemonHost, iConfig.daemonPort),
                 Configure
             );
             const seed = await wallet.getMnemonicSeed();
@@ -156,7 +157,7 @@ export default class NewWallet extends Component<Props, State> {
                 confirmWallet,
                 err
             ] = await WalletBackend.importWalletFromSeed(
-                Configure.defaultDaemon,
+                new Daemon(iConfig.daemonHost, iConfig.daemonPort),
                 100000,
                 confirmSeed,
                 Configure
