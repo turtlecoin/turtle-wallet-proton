@@ -166,7 +166,7 @@ const configure = {
 
     DefaultDaemonRPCPort: "11898",
 
-    nodeListURL: "http://trtl-nodes.bot.tips/list",
+    nodeListURL: "https://blockapi.turtlepay.io/node/list/online",
 
     ExplorerURL: "https://explorer.turtlecoin.lol",
 

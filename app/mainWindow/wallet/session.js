@@ -144,7 +144,7 @@ export default class WalletSession {
         const requestOptions = {
             method: "GET",
             timeout: Configure.requestTimeout,
-            uri: apiURL,
+            uri: Configure.nodeListURL,
             headers: {},
             json: true,
             gzip: false
