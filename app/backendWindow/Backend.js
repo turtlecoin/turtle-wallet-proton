@@ -505,7 +505,7 @@ export default class Backend {
                     body: `You've just received ${atomicToHuman(
                         transaction.totalAmount(),
                         true
-                    )} {Configure.ticker}.`
+                    )} ${Configure.ticker}.`
                 });
             }
         });
@@ -517,10 +517,15 @@ export default class Backend {
         })
 
         this.wallet.on("transport_receive", (data) => {
+          log.debug("TRANSPORT RECV", data);
           if (this.waitingOnLedger) {
             this.waitingOnLedger = false;
             this.send("ledgerPromptClose");
           }
+        })
+
+        this.wallet.on("transport_send", (data) => {
+          log.debug("TRANSPORT SEND", data);
         })
 
         this.setWalletActive(true);
