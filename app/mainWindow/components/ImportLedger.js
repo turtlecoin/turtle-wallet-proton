@@ -14,7 +14,7 @@ import { eventEmitter, reInitWallet, config } from "../index";
 import Configure from "../../configure";
 import ReactLoading from "react-loading";
 import iConfig from "../constants/config.json";
-
+import request from "request-promise";
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
 
@@ -280,7 +280,12 @@ export default class ImportLedger extends Component<Props, State> {
             importedWallet,
             scanHeight
         } = this.state;
-        const { backgroundColor, fillColor, textColor } = uiType(darkMode);
+        const {
+            backgroundColor,
+            fillColor,
+            textColor,
+            elementBaseColor
+        } = uiType(darkMode);
 
         return (
             <div>
@@ -372,8 +377,11 @@ export default class ImportLedger extends Component<Props, State> {
                                             ledger, and it handles all of the
                                             sensitive operations. Please enter
                                             the scan height for your ledger
-                                            wallet. If this is a brand new
-                                            wallet, click the new wallet button.
+                                            wallet, ie, the height of your first
+                                            transaction. <strong>If this is a brand new
+                                            wallet with no previous
+                                            transactions, click the new wallet
+                                            button.</strong>
                                         </p>
                                         <label
                                             className={`label ${textColor}`}
@@ -401,6 +409,37 @@ export default class ImportLedger extends Component<Props, State> {
                                                 you&apos;re not sure.
                                             </p>
                                         </label>
+                                        <br />
+                                        <button
+                                            className={`is-large button ${elementBaseColor}`}
+                                            onClick={async () => {
+                                                const requestOptions = {
+                                                    method: "GET",
+                                                    uri:
+                                                        Configure.currentHeightURL,
+                                                    headers: {},
+                                                    json: true,
+                                                    gzip: true
+                                                };
+
+                                                try {
+                                                    const result = await request(
+                                                        requestOptions
+                                                    );
+                                                    this.setState(
+                                                        {
+                                                            scanHeight:
+                                                                result.network_height
+                                                        },
+                                                        () => {
+                                                            this.nextPage();
+                                                        }
+                                                    );
+                                                } catch (err) {}
+                                            }}
+                                        >
+                                            New Wallet
+                                        </button>
                                     </div>
                                 )}
                                 {this.state.waitingOnLedger && (

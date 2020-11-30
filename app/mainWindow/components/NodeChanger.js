@@ -18,7 +18,7 @@ type Props = {
 type State = {
     connectionString: string,
     nodeChangeInProgress: boolean,
-    ssl: boolean,
+    ssl: boolean
 };
 
 export default class NodeChanger extends Component<Props, State> {
@@ -37,7 +37,7 @@ export default class NodeChanger extends Component<Props, State> {
                     : "Connecting, please wait..."
             }`,
             nodeChangeInProgress: false,
-            ssl: session.getDaemonConnectionInfo().ssl || false,
+            ssl: session.getDaemonConnectionInfo().ssl || false
         };
         this.changeNode = this.changeNode.bind(this);
         this.handleNodeInputChange = this.handleNodeInputChange.bind(this);
@@ -103,7 +103,7 @@ export default class NodeChanger extends Component<Props, State> {
     handleNodeChangeInProgress = () => {
         this.setState({
             nodeChangeInProgress: true,
-            ssl: undefined,
+            ssl: undefined
         });
     };
 
@@ -111,7 +111,7 @@ export default class NodeChanger extends Component<Props, State> {
         this.setState({
             nodeChangeInProgress: false,
             connectionString: `${session.daemonHost}:${session.daemonPort}`,
-            ssl: session.daemon.ssl,
+            ssl: session.daemon.ssl
         });
         log.debug(`Network Fee ${session.getNodeFee() || 0}`);
     };
@@ -164,11 +164,7 @@ export default class NodeChanger extends Component<Props, State> {
     render() {
         const { darkMode } = this.props;
         const { textColor, linkColor } = uiType(darkMode);
-        const {
-            nodeChangeInProgress,
-            connectionString,
-            ssl,
-        } = this.state;
+        const { nodeChangeInProgress, connectionString, ssl } = this.state;
         return (
             <form onSubmit={this.changeNode}>
                 <p className={`has-text-weight-bold ${textColor}`}>

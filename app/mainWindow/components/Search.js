@@ -650,7 +650,7 @@ export default class Search extends Component<Props, States> {
                                                                             {timestamp !==
                                                                             0
                                                                                 ? Math.max(
-                                                                                      session.daemon.getNetworkBlockCount() -
+                                                                                      session.getNetworkBlockHeight() -
                                                                                           blockHeight,
                                                                                       0
                                                                                   )

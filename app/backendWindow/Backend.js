@@ -511,22 +511,22 @@ export default class Backend {
         });
 
         this.wallet.on("user_confirm", () => {
-          log.info("Reached the confirm event");
-          this.waitingOnLedger = true;
-          this.send("ledgerPrompt");
-        })
+            log.info("Reached the confirm event");
+            this.waitingOnLedger = true;
+            this.send("ledgerPrompt");
+        });
 
-        this.wallet.on("transport_receive", (data) => {
-          log.debug("TRANSPORT RECV", data);
-          if (this.waitingOnLedger) {
-            this.waitingOnLedger = false;
-            this.send("ledgerPromptClose");
-          }
-        })
+        this.wallet.on("transport_receive", data => {
+            log.debug("TRANSPORT RECV", data);
+            if (this.waitingOnLedger) {
+                this.waitingOnLedger = false;
+                this.send("ledgerPromptClose");
+            }
+        });
 
-        this.wallet.on("transport_send", (data) => {
-          log.debug("TRANSPORT SEND", data);
-        })
+        this.wallet.on("transport_send", data => {
+            log.debug("TRANSPORT SEND", data);
+        });
 
         this.setWalletActive(true);
         this.send("syncStatus", this.wallet.getSyncStatus());

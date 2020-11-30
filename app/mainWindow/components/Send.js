@@ -427,11 +427,7 @@ export default class Send extends Component<Props, State> {
     };
 
     sendAll = () => {
-        const {
-            unlockedBalance,
-            fiatPrice,
-            nodeFee
-        } = this.state;
+        const { unlockedBalance, fiatPrice, nodeFee } = this.state;
 
         const totalAmount =
             unlockedBalance - parseInt(nodeFee, 10) <= 0 ? 0 : unlockedBalance;

@@ -149,8 +149,8 @@ ipcRenderer.on("fromMain", (event: Electron.IpcRendererEvent, message: any) => {
     switch (messageType) {
         case "config":
             if (!data.config) {
-              log.info("Received fucked up config!");
-              break;
+                log.info("Received fucked up config!");
+                break;
             }
 
             config = data.config;
@@ -181,7 +181,7 @@ ipcRenderer.on(
                 break;
             case "ledgerPromptClose":
                 eventEmitter.emit("closeModal");
-                break
+                break;
             case "authenticationError":
                 handleAuthenticationError(data);
                 break;
