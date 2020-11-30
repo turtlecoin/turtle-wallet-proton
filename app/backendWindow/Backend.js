@@ -14,7 +14,6 @@ import { createObjectCsvWriter } from "csv-writer";
 import { atomicToHuman, convertTimestamp } from "../mainWindow/utils/utils";
 import { remote } from "electron";
 import Configure from "../configure";
-import usb from "usb";
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
 
@@ -362,13 +361,7 @@ export default class Backend {
             this.wallet.stop();
         }
         if (this.transport && !isShuttingDown) {
-
-          console.log(this.transport);
-          const deviceList = usb.getDeviceList();
-          console.log(deviceList);
-
           await this.transport.close();
-          console.log(this.transport);
 
           // remote.app.relaunch();
           // remote.app.quit();
