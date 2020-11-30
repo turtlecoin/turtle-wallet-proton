@@ -240,7 +240,8 @@
         "semver": "^6.2.0",
         "source-code-pro": "^2.30.2",
         "tail": "^2.0.3",
-        "turtlecoin-wallet-backend": "^6.0.3"
+        "turtlecoin-wallet-backend": "^6.0.3",
+        "usb": "^1.6.3"
     },
     "devEngines": {
         "node": ">=10.x",

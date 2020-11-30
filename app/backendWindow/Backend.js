@@ -14,6 +14,7 @@ import { createObjectCsvWriter } from "csv-writer";
 import { atomicToHuman, convertTimestamp } from "../mainWindow/utils/utils";
 import { remote } from "electron";
 import Configure from "../configure";
+import usb from "usb";
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
 
@@ -354,17 +355,23 @@ export default class Backend {
         return transactions;
     }
 
-    stop(isShuttingDown: boolean) {
+    async stop(isShuttingDown: boolean) {
         if (this.wallet) {
             this.saveWallet(false);
             clearInterval(this.saveInterval);
             this.wallet.stop();
         }
         if (this.transport && !isShuttingDown) {
-          log.info("Deleting old transport.");
-          delete this.transport;
-          remote.app.relaunch();
-          remote.app.quit();
+
+          console.log(this.transport);
+          const deviceList = usb.getDeviceList();
+          console.log(deviceList);
+
+          await this.transport.close();
+          console.log(this.transport);
+
+          // remote.app.relaunch();
+          // remote.app.quit();
         }
         if (isShuttingDown) {
             ipcRenderer.send("backendStopped");

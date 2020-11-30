@@ -37,7 +37,7 @@ async function parseMessage(message: any) {
             break;
         case "stopRequest":
             if (backend) {
-                backend.stop(true);
+                await backend.stop(true);
             } else {
                 ipcRenderer.send("backendStopped");
             }
