@@ -14,8 +14,7 @@ import { createObjectCsvWriter } from "csv-writer";
 import { atomicToHuman, convertTimestamp } from "../mainWindow/utils/utils";
 import { remote } from "electron";
 import Configure from "../configure";
-
-const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
+import TransportNodeHID from "@ledgerhq/hw-transport-node-hid";
 
 export function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
