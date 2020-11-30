@@ -610,6 +610,9 @@ export default class Backend {
         ) {
             log.info("ledger wallet detected.");
             const devices = await TransportNodeHID.list();
+
+            console.log(devices);
+
             if (devices.length === 0) {
                 const noLedgerErr = {
                   errorString: "This is a ledger enabled wallet. You must have a ledger plugged in."
@@ -617,21 +620,30 @@ export default class Backend {
                 this.send("authenticationError", noLedgerErr);
                 return;
             }
-            this.transport = await TransportNodeHID.create();
-            this.send("ledgerPrompt");
-            const [
-                ledgerWallet,
-                error
-            ] = await WalletBackend.openWalletFromFile(
-                this.daemon,
-                this.walletFile,
-                this.walletPassword,
-                { ...Configure, ledgerTransport: this.transport }
-            );
+            try {
+              this.transport = await TransportNodeHID.create();
+              this.send("ledgerPrompt");
+              const [
+                  ledgerWallet,
+                  error
+              ] = await WalletBackend.openWalletFromFile(
+                  this.daemon,
+                  this.walletFile,
+                  this.walletPassword,
+                  { ...Configure, ledgerTransport: this.transport }
+              );
 
-            console.log("transport created", this.transport);
+              console.log("transport created", this.transport);
 
-            this.walletInit(ledgerWallet);
+              this.walletInit(ledgerWallet);
+            } catch(err) {
+              const ledgexErr = {
+                errorString: "There was a problem initializing the connection with the ledger. "+err.toString()
+              }
+              this.send("authenticationError", ledgexErr);
+              return;
+            }
+
         } else {
             error.errorString = error.toString();
             console.log(error.errorCode, error.toString());

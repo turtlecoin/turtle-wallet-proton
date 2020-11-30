@@ -68,6 +68,10 @@
             ],
             "category": "Development"
         },
+        "mac": {
+          "entitlements": "entitlements.mac.plist",
+          "hardenedRuntime": false
+        },
         "directories": {
             "buildResources": "resources",
             "output": "release"
