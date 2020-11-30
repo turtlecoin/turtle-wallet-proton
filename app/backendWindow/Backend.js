@@ -12,6 +12,7 @@ import log from "electron-log";
 import { ipcRenderer } from "electron";
 import { createObjectCsvWriter } from "csv-writer";
 import { atomicToHuman, convertTimestamp } from "../mainWindow/utils/utils";
+import { remote } from "electron";
 import Configure from "../configure";
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
@@ -359,6 +360,12 @@ export default class Backend {
             clearInterval(this.saveInterval);
             this.wallet.stop();
         }
+        if (this.transport && !isShuttingDown) {
+          log.info("Deleting old transport.");
+          delete this.transport;
+          remote.app.relaunch();
+          remote.app.quit();
+        }
         if (isShuttingDown) {
             ipcRenderer.send("backendStopped");
         }
@@ -585,6 +592,8 @@ export default class Backend {
     }
 
     async startWallet(password: string): Promise<void> {
+        log.info("Attempting to start wallet.");
+
         this.walletPassword = password;
         const [openWallet, error] = await WalletBackend.openWalletFromFile(
             this.daemon,
@@ -600,13 +609,13 @@ export default class Backend {
         } else if (
             error.errorCode === WalletErrorCode.LEDGER_TRANSPORT_REQUIRED
         ) {
+            log.info("ledger wallet detected.");
             const devices = await TransportNodeHID.list();
             if (devices.length === 0) {
-                log.Warning("You must have a ledger plugged in.");
+                log.info("You must have a ledger plugged in.");
                 return;
             }
-
-            const transport = await TransportNodeHID.create();
+            this.transport = await TransportNodeHID.create();
             this.send("ledgerPrompt");
             const [
                 ledgerWallet,
@@ -615,8 +624,11 @@ export default class Backend {
                 this.daemon,
                 this.walletFile,
                 this.walletPassword,
-                { ...Configure, ledgerTransport: transport }
+                { ...Configure, ledgerTransport: this.transport }
             );
+
+            console.log("transport created", this.transport);
+
             this.walletInit(ledgerWallet);
         } else {
             error.errorString = error.toString();
