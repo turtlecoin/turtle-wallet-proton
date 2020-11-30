@@ -611,7 +611,10 @@ export default class Backend {
             log.info("ledger wallet detected.");
             const devices = await TransportNodeHID.list();
             if (devices.length === 0) {
-                log.info("You must have a ledger plugged in.");
+                const noLedgerErr = {
+                  errorString: "This is a ledger enabled wallet. You must have a ledger plugged in."
+                }
+                this.send("authenticationError", noLedgerErr);
                 return;
             }
             this.transport = await TransportNodeHID.create();
