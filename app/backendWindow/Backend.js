@@ -505,6 +505,7 @@ export default class Backend {
         });
 
         this.wallet.on("incomingtx", transaction => {
+            log.info(transaction);
             if (this.notifications) {
                 // eslint-disable-next-line no-new
                 new window.Notification("Transaction Received!", {

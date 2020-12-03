@@ -265,13 +265,25 @@ export default class Home extends Component<Props, State> {
                                 {transactions !== undefined &&
                                     transactions.length > 0 &&
                                     transactions.map(tx => {
+                                        const [ timestamp, hash, amount, balance ] = tx;
+
+                                        log.info("hash:", hash);
+                                        log.info("amount:", amount)
+                                        log.info("amount > 0", amount > 0)
+                                        log.info("amount < 0", amount > 0)
+
                                         const rowIsExpanded = expandedRows.includes(
-                                            tx[1]
+                                            hash
                                         );
-                                        const transactionHash = tx[1];
+                                        const transactionHash = hash;
                                         const toggleSymbol = rowIsExpanded
                                             ? "-"
                                             : "+";
+
+                                        if (amount == 0) {
+                                          return null;
+                                        }
+
                                         return (
                                             <Fragment key={transactionHash}>
                                                 <tr>
@@ -292,29 +304,29 @@ export default class Home extends Component<Props, State> {
                                                         </button>
                                                     </td>
                                                     <td>
-                                                        {tx[0] === 0 && (
+                                                        {timestamp === 0 && (
                                                             <p className="has-text-danger">
                                                                 {
                                                                     il8n.unconfirmed
                                                                 }
                                                             </p>
                                                         )}
-                                                        {tx[0] > 0 && (
+                                                        {timestamp > 0 && (
                                                             <p>
                                                                 {convertTimestamp(
-                                                                    tx[0]
+                                                                    timestamp
                                                                 )}
                                                             </p>
                                                         )}
                                                     </td>
-                                                    <td>{tx[1]}</td>
-                                                    {tx[2] < 0 && (
+                                                    <td>{hash}</td>
+                                                    {amount < 0 && (
                                                         <td>
                                                             <p className="has-text-danger has-text-right">
                                                                 {displayCurrency ===
                                                                     Configure.ticker &&
                                                                     atomicToHuman(
-                                                                        tx[2],
+                                                                        amount,
                                                                         true
                                                                     )}
                                                                 {displayCurrency ===
@@ -327,7 +339,7 @@ export default class Home extends Component<Props, State> {
                                                                         (
                                                                             fiatPrice *
                                                                             atomicToHuman(
-                                                                                tx[2],
+                                                                                amount,
                                                                                 false
                                                                             )
                                                                         ).toFixed(
@@ -346,7 +358,7 @@ export default class Home extends Component<Props, State> {
                                                                         (
                                                                             fiatPrice *
                                                                             atomicToHuman(
-                                                                                tx[2],
+                                                                                amount,
                                                                                 false
                                                                             )
                                                                         ).toFixed(
@@ -363,13 +375,13 @@ export default class Home extends Component<Props, State> {
                                                             </p>
                                                         </td>
                                                     )}
-                                                    {tx[2] > 0 && (
+                                                    {amount > 0 && (
                                                         <td>
                                                             <p className="has-text-right">
                                                                 {displayCurrency ===
                                                                     Configure.ticker &&
                                                                     atomicToHuman(
-                                                                        tx[2],
+                                                                        amount,
                                                                         true
                                                                     )}
                                                                 {displayCurrency ===
@@ -380,7 +392,7 @@ export default class Home extends Component<Props, State> {
                                                                         (
                                                                             fiatPrice *
                                                                             atomicToHuman(
-                                                                                tx[2],
+                                                                                amount,
                                                                                 false
                                                                             )
                                                                         ).toFixed(
@@ -395,7 +407,7 @@ export default class Home extends Component<Props, State> {
                                                                         (
                                                                             fiatPrice *
                                                                             atomicToHuman(
-                                                                                tx[2],
+                                                                                amount,
                                                                                 false
                                                                             )
                                                                         ).toFixed(
@@ -410,7 +422,7 @@ export default class Home extends Component<Props, State> {
                                                             {displayCurrency ===
                                                                 Configure.ticker &&
                                                                 atomicToHuman(
-                                                                    tx[3],
+                                                                    balance,
                                                                     true
                                                                 )}
                                                             {displayCurrency ===
@@ -421,7 +433,7 @@ export default class Home extends Component<Props, State> {
                                                                     (
                                                                         fiatPrice *
                                                                         atomicToHuman(
-                                                                            tx[3],
+                                                                            balance,
                                                                             false
                                                                         )
                                                                     ).toFixed(
@@ -436,7 +448,7 @@ export default class Home extends Component<Props, State> {
                                                                     (
                                                                         fiatPrice *
                                                                         atomicToHuman(
-                                                                            tx[3],
+                                                                            balance,
                                                                             false
                                                                         )
                                                                     ).toFixed(
@@ -496,14 +508,14 @@ export default class Home extends Component<Props, State> {
                                                                             </p>
                                                                         </td>
                                                                         <td>
-                                                                            {tx[0] ===
+                                                                            {timestamp ===
                                                                             0
                                                                                 ? "Still In Memory Pool"
                                                                                 : convertTimestamp(
-                                                                                      tx[0]
+                                                                                      timestamp
                                                                                   )}
                                                                             <br />
-                                                                            {tx[0] !==
+                                                                            {timestamp !==
                                                                             0
                                                                                 ? Math.max(
                                                                                       networkBlockHeight -
@@ -512,7 +524,7 @@ export default class Home extends Component<Props, State> {
                                                                                   )
                                                                                 : 0}
                                                                             <br />
-                                                                            {tx[0] ===
+                                                                            {timestamp ===
                                                                             0
                                                                                 ? "Still In Memory Pool"
                                                                                 : formatLikeCurrency(
@@ -524,7 +536,7 @@ export default class Home extends Component<Props, State> {
                                                                             }{" "}
                                                                             <br />
                                                                             {
-                                                                                tx[1]
+                                                                                hash
                                                                             }{" "}
                                                                             <br />
                                                                             {tx[5] !==
@@ -542,14 +554,14 @@ export default class Home extends Component<Props, State> {
                                                                             <br />
                                                                             <p
                                                                                 className={
-                                                                                    tx[2] <
+                                                                                    amount <
                                                                                     0
                                                                                         ? "is-negative-transaction has-text-danger"
                                                                                         : ""
                                                                                 }
                                                                             >
                                                                                 {atomicToHuman(
-                                                                                    tx[2],
+                                                                                    amount,
                                                                                     true
                                                                                 )}{" "}
                                                                                 {
