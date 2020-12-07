@@ -69,7 +69,6 @@ export default class WalletSession {
 
     setDaemonConnectionInfo(daemonConnectionInfo: DaemonConnection): void {
         this.daemonConnectionInfo = daemonConnectionInfo;
-        log.info(this.daemonConnectionInfo);
         eventEmitter.emit("gotDaemonConnectionInfo");
     }
 

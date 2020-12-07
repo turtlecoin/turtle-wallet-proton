@@ -378,10 +378,12 @@ export default class ImportLedger extends Component<Props, State> {
                                             sensitive operations. Please enter
                                             the scan height for your ledger
                                             wallet, ie, the height of your first
-                                            transaction. <strong>If this is a brand new
-                                            wallet with no previous
-                                            transactions, click the new wallet
-                                            button.</strong>
+                                            transaction.{" "}
+                                            <strong>
+                                                If this is a brand new wallet
+                                                with no previous transactions,
+                                                click the new wallet button.
+                                            </strong>
                                         </p>
                                         <label
                                             className={`label ${textColor}`}

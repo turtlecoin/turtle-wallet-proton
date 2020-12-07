@@ -265,12 +265,12 @@ export default class Home extends Component<Props, State> {
                                 {transactions !== undefined &&
                                     transactions.length > 0 &&
                                     transactions.map(tx => {
-                                        const [ timestamp, hash, amount, balance ] = tx;
-
-                                        log.info("hash:", hash);
-                                        log.info("amount:", amount)
-                                        log.info("amount > 0", amount > 0)
-                                        log.info("amount < 0", amount > 0)
+                                        const [
+                                            timestamp,
+                                            hash,
+                                            amount,
+                                            balance
+                                        ] = tx;
 
                                         const rowIsExpanded = expandedRows.includes(
                                             hash
@@ -281,7 +281,7 @@ export default class Home extends Component<Props, State> {
                                             : "+";
 
                                         if (amount == 0) {
-                                          return null;
+                                            return null;
                                         }
 
                                         return (

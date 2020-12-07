@@ -95,7 +95,6 @@ export default class Backend {
                 }
             }
         }
-        log.debug({ type, data });
         ipcRenderer.send("fromBackend", type, data);
     }
 
@@ -244,8 +243,6 @@ export default class Backend {
             sendAll // sendAll
         );
 
-        log.info(result);
-
         if (result.success) {
             let actualAmount = amount;
 
@@ -360,10 +357,10 @@ export default class Backend {
             this.wallet.stop();
         }
         if (this.transport && !isShuttingDown) {
-          await this.transport.close();
+            await this.transport.close();
 
-          // remote.app.relaunch();
-          // remote.app.quit();
+            // remote.app.relaunch();
+            // remote.app.quit();
         }
         if (isShuttingDown) {
             ipcRenderer.send("backendStopped");
@@ -505,7 +502,6 @@ export default class Backend {
         });
 
         this.wallet.on("incomingtx", transaction => {
-            log.info(transaction);
             if (this.notifications) {
                 // eslint-disable-next-line no-new
                 new window.Notification("Transaction Received!", {
@@ -518,7 +514,6 @@ export default class Backend {
         });
 
         this.wallet.on("user_confirm", () => {
-            log.info("Reached the confirm event");
             this.waitingOnLedger = true;
             this.send("ledgerPrompt");
         });
@@ -616,35 +611,37 @@ export default class Backend {
 
             if (devices.length === 0) {
                 const noLedgerErr = {
-                  errorString: "This is a ledger enabled wallet. You must have a ledger plugged in."
-                }
+                    errorString:
+                        "This is a ledger enabled wallet. You must have a ledger plugged in."
+                };
                 this.send("authenticationError", noLedgerErr);
                 return;
             }
             try {
-              this.transport = await TransportNodeHID.create();
-              this.send("ledgerPrompt");
-              const [
-                  ledgerWallet,
-                  error
-              ] = await WalletBackend.openWalletFromFile(
-                  this.daemon,
-                  this.walletFile,
-                  this.walletPassword,
-                  { ...Configure, ledgerTransport: this.transport }
-              );
+                this.transport = await TransportNodeHID.create();
+                this.send("ledgerPrompt");
+                const [
+                    ledgerWallet,
+                    error
+                ] = await WalletBackend.openWalletFromFile(
+                    this.daemon,
+                    this.walletFile,
+                    this.walletPassword,
+                    { ...Configure, ledgerTransport: this.transport }
+                );
 
-              console.log("transport created", this.transport);
+                console.log("transport created", this.transport);
 
-              this.walletInit(ledgerWallet);
-            } catch(err) {
-              const ledgexErr = {
-                errorString: "There was a problem initializing the connection with the ledger. "+err.toString()
-              }
-              this.send("authenticationError", ledgexErr);
-              return;
+                this.walletInit(ledgerWallet);
+            } catch (err) {
+                const ledgexErr = {
+                    errorString:
+                        "There was a problem initializing the connection with the ledger. " +
+                        err.toString()
+                };
+                this.send("authenticationError", ledgexErr);
+                return;
             }
-
         } else {
             error.errorString = error.toString();
             console.log(error.errorCode, error.toString());

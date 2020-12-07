@@ -22,7 +22,7 @@ export default class ProtonConfig {
     }
 
     modifyConfig(propertyName: string, value: any) {
-        if (!value) {
+        if (value === undefined || value === null) {
             console.log(propertyName + " doesn't have a value");
             return;
         }

@@ -366,6 +366,7 @@ function showMainWindow() {
 
 windowEvents.on("bothWindowsReady", () => {
     messageRelayer = new MessageRelayer(mainWindow, backendWindow);
+    log.info(config);
     messageRelayer.sendToBackend("config", config);
     messageRelayer.sendToFrontend("config", {
         config,

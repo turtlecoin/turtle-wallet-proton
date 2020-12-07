@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import { ipcRenderer } from "electron";
 import { config, configManager } from "../index";
 import { uiType } from "../utils/utils";
+import log from "electron-log";
 
 type State = {
     notifications: boolean
@@ -29,6 +30,8 @@ export default class NotificationsToggle extends Component<Props, State> {
 
     toggle = () => {
         const { notifications } = this.state;
+
+        log.info(!notifications);
 
         configManager.modifyConfig("notifications", !notifications);
         this.setState({
