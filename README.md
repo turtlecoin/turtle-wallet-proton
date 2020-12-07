@@ -7,11 +7,11 @@
 
 ### Master Build Status
 
-![Master Build Status](https://github.com/turtlecoin/turtle-wallet-proton/workflows/Build%20TurtleCoin/badge.svg?branch=master)
+![Master Build Status](https://github.com/turtlecoin/turtle-wallet-proton/workflows/Build%20Proton/badge.svg?branch=master)
 
 ### Development Build Status
 
-![Development Build Status](https://github.com/turtlecoin/turtle-wallet-proton/workflows/Build%20TurtleCoin/badge.svg?branch=development)
+![Development Build Status](https://github.com/turtlecoin/turtle-wallet-proton/workflows/Build%20Proton/badge.svg?branch=development)
 
 <img src="https://raw.githubusercontent.com/turtlecoin/turtle-wallet-proton/development/screenshots/screenshot.png">
 <p>
