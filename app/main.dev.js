@@ -319,6 +319,7 @@ app.on("ready", async () => {
             log.debug("Closing to system tray or dock.");
             mainWindow.hide();
         } else {
+            messageRelayer.sendToBackend("stopRequest");
             isQuitting = true;
             quitTimeout = setTimeout(app.exit, 1000 * 10);
         }
