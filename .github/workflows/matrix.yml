@@ -50,10 +50,11 @@ jobs:
           rm -rf ./release/mac
           rm -rf ./release/*.yml
           ls ./release
+
+          sha256
+
           export FILE_NAME=(release/TurtleCoin*)
-          echo ::set-output name=file_name::${FILE_NAME}
-          echo $FILE_NAME
-          echo $FILE_NAME:8
+          echo ::set-output name=file_name::${FILE_NAME:8}
 
       - name: Additional Linux Preparation
         id: additional_deploy
@@ -61,7 +62,7 @@ jobs:
         shell: bash
         run: |
           export DEB_NAME=(release/turtlecoin-*)
-          echo ::set-output name=deb_name::${DEB_NAME}
+          echo ::set-output name=deb_name::${DEB_NAME:8}
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
