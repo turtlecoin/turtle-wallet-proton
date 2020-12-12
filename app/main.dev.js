@@ -41,6 +41,8 @@ const { version } = packageInfo;
 const windowEvents = new EventEmitter();
 export let messageRelayer = null;
 
+let sentCloseMessage = false;
+
 let quitTimeout = null;
 let closeToTray;
 
@@ -220,10 +222,6 @@ const createMainWindow = () => {
             if (!forceQuit) {
                 event.preventDefault();
                 mainWindow?.hide();
-            } else {
-                messageRelayer.sendToBackend("stopRequest");
-                forceQuit = true;
-                quitTimeout = setTimeout(app.exit, 1000 * 10);
             }
         });
     } else {
@@ -232,8 +230,10 @@ const createMainWindow = () => {
                 event.preventDefault();
                 mainWindow?.hide();
             } else {
+              if (!sentCloseMessage) {
                 messageRelayer.sendToBackend("stopRequest");
                 quitTimeout = setTimeout(app.exit, 1000 * 10);
+              }
             }
         });
     }
@@ -311,9 +311,11 @@ const createTray = () => {
                 {
                     label: "Quit",
                     click() {
+                      if (!sentCloseMessage) {
                         messageRelayer.sendToBackend("stopRequest");
                         forceQuit = true;
                         quitTimeout = setTimeout(app.exit, 1000 * 10);
+                      }
                     }
                 }
             ])
