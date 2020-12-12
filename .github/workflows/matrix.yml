@@ -53,25 +53,19 @@ jobs:
           export FILE_NAME=(release/TurtleCoin*)
           echo ::set-output name=file_name::${FILE_NAME:8}
 
-      - name: Additional Linux Preparation
-        id: additional_deploy
-        if: matrix.os == 'ubuntu-latest'
-        shell: bash
-        run: |
-          export DEB_NAME=(release/turtlecoin-*)
-          echo ::set-output name=deb_name::${DEB_NAME:8}
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            export DEB_NAME=(release/turtlecoin-*)
+            echo ::set-output name=deb_name::${DEB_NAME:8}
 
       - name: Print Checksums
         id: additional_deploy
-        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
-          sha256sum release/*
-        if: matrix.os == 'macOS-latest'
-        shell: bash
-        run: |
-          shasum -a 256 ./release/*
-
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            shasum -a 256 ./release/*
+          else
+            sha256sum release/*
+          fi
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
@@ -83,8 +77,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ steps.additional_deploy.outputs.deb_name }}
-          path: ./release/${{ steps.additional_deploy.outputs.deb_name }}
+          name: ${{ steps.before_deploy.outputs.deb_name }}
+          path: ./release/${{ steps.before_deploy.outputs.deb_name }}
 
       - name: Upload Artifact to GH Release
         if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton'
