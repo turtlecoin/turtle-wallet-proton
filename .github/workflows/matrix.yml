@@ -51,7 +51,7 @@ jobs:
           rm -rf ./release/*.yml
           ls ./release
           export FILE_NAME=(release/TurtleCoin*)
-          echo ::set-output name=file_name::${FILE_NAME:8}
+          echo ::set-output name=file_name::${FILE_NAME}
           echo $FILE_NAME
           echo $FILE_NAME:8
 
@@ -61,7 +61,7 @@ jobs:
         shell: bash
         run: |
           export DEB_NAME=(release/turtlecoin-*)
-          echo ::set-output name=deb_name::${DEB_NAME:8}
+          echo ::set-output name=deb_name::${DEB_NAME}
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
