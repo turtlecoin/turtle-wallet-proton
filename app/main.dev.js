@@ -50,10 +50,12 @@ let trayIcon = null;
 let config = null;
 let frontendReady = false;
 let backendReady = false;
-let configReady = false;
 
 let mainWindow = null;
 let backendWindow = null;
+
+let forceQuit = false;
+
 if (process.env.NODE_ENV === "production") {
     // eslint-disable-next-line global-require
     const sourceMapSupport = require("source-map-support");
@@ -99,6 +101,7 @@ const readConfig = () => {
         config = iConfig;
         config.darkMode = systemPreferences.isDarkMode();
     }
+    closeToTray = config.closeToTray;
 };
 
 const readAddressBook = () => {
@@ -209,14 +212,28 @@ const createMainWindow = () => {
     mainWindow.loadURL(`file://${__dirname}/mainWindow/app.html`);
 
     if (process.platform === "darwin") {
-        let forceQuit = false;
+        forceQuit = false;
         app.on("before-quit", function() {
             forceQuit = true;
         });
         mainWindow.on("close", function(event) {
-            if (!forceQuit || closeToTray) {
+            if (!forceQuit) {
                 event.preventDefault();
                 mainWindow?.hide();
+            } else {
+                messageRelayer.sendToBackend("stopRequest");
+                forceQuit = true;
+                quitTimeout = setTimeout(app.exit, 1000 * 10);
+            }
+        });
+    } else {
+        mainWindow.on("close", function(event) {
+            if (closeToTray) {
+                event.preventDefault();
+                mainWindow?.hide();
+            } else {
+                messageRelayer.sendToBackend("stopRequest");
+                quitTimeout = setTimeout(app.exit, 1000 * 10);
             }
         });
     }
@@ -230,6 +247,11 @@ const createMainWindow = () => {
             throw new Error('"mainWindow" is not defined');
         }
         mainWindow.show();
+
+        frontendReady = true;
+        if (frontendReady && backendReady) {
+            windowEvents.emit("bothWindowsReady");
+        }
     });
 };
 
@@ -245,6 +267,10 @@ const createBackWindow = () => {
     backendWindow.webContents.on("did-finish-load", () => {
         if (!backendWindow) {
             throw new Error('"backendWindow" is not defined');
+        }
+        backendReady = true;
+        if (frontendReady && backendReady) {
+            windowEvents.emit("bothWindowsReady");
         }
     });
 };
@@ -286,7 +312,7 @@ const createTray = () => {
                     label: "Quit",
                     click() {
                         messageRelayer.sendToBackend("stopRequest");
-                        closeToTray = true;
+                        forceQuit = true;
                         quitTimeout = setTimeout(app.exit, 1000 * 10);
                     }
                 }
@@ -304,8 +330,8 @@ const showMainWindow = () => {
     }
 };
 
-const toggleCloseToTray = (state: boolean) => {
-    closeToTray = !state;
+const setCloseToTray = (state: boolean) => {
+    closeToTray = state;
 };
 
 // event function listeners
@@ -345,7 +371,7 @@ const setEventListeners = () => {
     });
 
     ipcMain.on("closeToTrayToggle", (event: any, state: boolean) => {
-        toggleCloseToTray(state);
+        setCloseToTray(state);
     });
 
     ipcMain.on("backendStopped", () => {
