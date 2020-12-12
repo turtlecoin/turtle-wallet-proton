@@ -48,8 +48,9 @@ jobs:
           rm -rf ./release/*.zip
           rm -rf ./release/*-unpacked
           rm -rf ./release/mac
+          rm -rf ./release/*.yml
           ls ./release
-          export FILE_NAME=(release/proton-wallet*)
+          export FILE_NAME=(release/TurtleCoin*)
           echo ::set-output name=file_name::${FILE_NAME}
           echo $FILE_NAME
           echo $FILE_NAME:8
