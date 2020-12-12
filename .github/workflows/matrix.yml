@@ -100,5 +100,5 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./release/${{ steps.additional_deploy.outputs.deb_name }}
-          asset_name: ${{ steps.additional_deploy.outputs.deb_name }}
+          asset_name: ${{ steps.before_deploy.outputs.deb_name }}
           asset_content_type: application/octet-stream
