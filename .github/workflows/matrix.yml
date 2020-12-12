@@ -49,8 +49,10 @@ jobs:
           rm -rf ./release/*-unpacked
           rm -rf ./release/mac
           ls ./release
-          export NAME=(release/proton-wallet*)
-          echo ::set-output name=file_name::${NAME:8}
+          export FILE_NAME=(release/proton-wallet*)
+          echo ::set-output name=file_name::${FILE_NAME}
+          echo $FILE_NAME
+          echo $FILE_NAME:8
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
