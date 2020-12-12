@@ -56,6 +56,7 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
             export DEB_NAME=(release/turtlecoin-*)
             echo ::set-output name=deb_name::${DEB_NAME:8}
+          fi
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
