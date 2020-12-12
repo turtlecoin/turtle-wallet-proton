@@ -51,7 +51,7 @@ jobs:
           rm -rf ./release/*.yml
           ls ./release
 
-          sha256
+          sha256sum release/*
 
           export FILE_NAME=(release/TurtleCoin*)
           echo ::set-output name=file_name::${FILE_NAME:8}
