@@ -74,7 +74,7 @@ jobs:
           name: ${{ steps.before_deploy.outputs.file_name }}
           path: ./release/${{ steps.before_deploy.outputs.file_name }}
 
-      - name: Store Second Build Artifact
+      - name: Store Additional Build Artifact
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v1
         with:
