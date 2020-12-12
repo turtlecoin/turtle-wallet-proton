@@ -58,6 +58,16 @@ jobs:
             echo ::set-output name=deb_name::${DEB_NAME:8}
           fi
 
+      - name: Print Checksums
+        id: additional_deploy
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            shasum -a 256 ./release/*
+          else
+            sha256sum release/*
+          fi
+
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -83,7 +93,7 @@ jobs:
           asset_content_type: application/octet-stream
 
       - name: Upload Additional Artifact to GH Release
-        if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton' && matrix.os == 'ubuntu-latest'
+        if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton'
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
