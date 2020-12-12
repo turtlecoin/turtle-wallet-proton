@@ -51,17 +51,32 @@ jobs:
           rm -rf ./release/*.yml
           ls ./release
           export FILE_NAME=(release/TurtleCoin*)
-          echo ::set-output name=file_name::${FILE_NAME}
+          echo ::set-output name=file_name::${FILE_NAME:8}
           echo $FILE_NAME
           echo $FILE_NAME:8
+
+      - name: Additional Linux Preparation
+        id: additional_deploy
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          export DEB_NAME=(release/turtlecoin-*)
+          echo ::set-output name=deb_name::${DEB_NAME:8}
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: build_dir
-          path: ./release
+          name: ${{ steps.before_deploy.outputs.file_name }}
+          path: ./release/${{ steps.before_deploy.outputs.file_name }}
 
-      - name: Upload to GH Release
+      - name: Store Second Build Artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ steps.additional_deploy.outputs.deb_name }}
+          path: ./release/${{ steps.additional_deploy.outputs.deb_name }}
+
+      - name: Upload Artifact to GH Release
         if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton'
         uses: actions/upload-release-asset@v1.0.1
         env:
@@ -70,4 +85,15 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./release/${{ steps.before_deploy.outputs.file_name }}
           asset_name: ${{ steps.before_deploy.outputs.file_name }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload Additional Artifact to GH Release
+        if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton'
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./release/${{ steps.additional_deploy.outputs.deb_name }}
+          asset_name: ${{ steps.additional_deploy.outputs.deb_name }}
           asset_content_type: application/octet-stream

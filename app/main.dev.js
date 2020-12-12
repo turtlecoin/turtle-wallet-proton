@@ -230,10 +230,10 @@ const createMainWindow = () => {
                 event.preventDefault();
                 mainWindow?.hide();
             } else {
-              if (!sentCloseMessage) {
-                messageRelayer.sendToBackend("stopRequest");
-                quitTimeout = setTimeout(app.exit, 1000 * 10);
-              }
+                if (!sentCloseMessage) {
+                    messageRelayer.sendToBackend("stopRequest");
+                    quitTimeout = setTimeout(app.exit, 1000 * 10);
+                }
             }
         });
     }
@@ -242,7 +242,7 @@ const createMainWindow = () => {
         mainWindow = null;
     });
     mainWindow.webContents.on("did-finish-load", () => {
-        console.log("Main window finished loading.")
+        console.log("Main window finished loading.");
         if (!mainWindow) {
             throw new Error('"mainWindow" is not defined');
         }
@@ -290,11 +290,13 @@ const createTray = () => {
                 "./mainWindow/images/icon_color_64x64.png"
             );
         } else {
-            console.log("attempting to set tray icon to " + path.join(__dirname, "./mainWindow/images/icon.ico"))
+            console.log(
+                "attempting to set tray icon to " +
+                    path.join(__dirname, "./mainWindow/images/icon.ico")
+            );
             trayIcon = path.join(__dirname, "./mainWindow/images/icon.ico");
         }
         tray = new Tray(trayIcon);
-
 
         // then set the context menu
         tray.setContextMenu(
@@ -311,11 +313,11 @@ const createTray = () => {
                 {
                     label: "Quit",
                     click() {
-                      if (!sentCloseMessage) {
-                        messageRelayer.sendToBackend("stopRequest");
-                        forceQuit = true;
-                        quitTimeout = setTimeout(app.exit, 1000 * 10);
-                      }
+                        if (!sentCloseMessage) {
+                            messageRelayer.sendToBackend("stopRequest");
+                            forceQuit = true;
+                            quitTimeout = setTimeout(app.exit, 1000 * 10);
+                        }
                     }
                 }
             ])
