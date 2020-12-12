@@ -49,9 +49,6 @@ jobs:
           rm -rf ./release/*-unpacked
           rm -rf ./release/mac
           rm -rf ./release/*.yml
-          ls ./release
-
-          sha256sum release/*
 
           export FILE_NAME=(release/TurtleCoin*)
           echo ::set-output name=file_name::${FILE_NAME:8}
@@ -63,6 +60,18 @@ jobs:
         run: |
           export DEB_NAME=(release/turtlecoin-*)
           echo ::set-output name=deb_name::${DEB_NAME:8}
+
+      - name: Print Checksums
+        id: additional_deploy
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          sha256sum release/*
+        if: matrix.os == 'macOS-latest'
+        shell: bash
+        run: |
+          shasum -a 256 ./release/*
+
 
       - name: Store Build Artifact
         uses: actions/upload-artifact@v1
