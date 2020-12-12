@@ -94,16 +94,10 @@ const readConfig = () => {
                 JSON.stringify(config)
             );
         }
-        configReady = true;
-        if (frontendReady && backendReady)
-            windowEvents.emit("bothWindowsReady");
     } else {
         log.info("Creating new config.");
         config = iConfig;
         config.darkMode = systemPreferences.isDarkMode();
-        configReady = true;
-        if (frontendReady && backendReady)
-            windowEvents.emit("bothWindowsReady");
     }
 };
 
@@ -129,21 +123,6 @@ const readAddressBook = () => {
     }
 };
 
-// const installExtensions = async () => {
-//   // eslint-disable-next-line global-require
-//   const installer = require('electron-devtools-installer');
-//   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-//   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-
-//   return Promise.all(
-//     extensions.map(name => installer.default(installer[name], forceDownload))
-//   ).catch(console.log);
-// };
-
-/**
- * Check for single instance
- */
-
 const checkSingleInstance = () => {
     const isSingleInstance = app.requestSingleInstanceLock();
     if (!isSingleInstance) {
@@ -157,17 +136,6 @@ const checkSingleInstance = () => {
         mainWindow.focus();
     });
 };
-
-// catch uncaught exceptions
-process.on("uncaughtException", event => {
-    console.log(event);
-    // catch uncaught exceptions in the main process
-    dialog.showErrorBox(
-        "Uncaught Error",
-        "An unexpected error has occurred. Please report this error, and what you were doing to cause it."
-    );
-    process.exit(1);
-});
 
 const createContextMenu = () => {
     // create the context menu
@@ -251,18 +219,18 @@ const createMainWindow = () => {
                 mainWindow?.hide();
             }
         });
-        mainWindow.on("closed", () => {
-            mainWindow = null;
-        });
-        mainWindow.webContents.on("did-finish-load", () => {
-            if (!mainWindow) {
-                throw new Error('"mainWindow" is not defined');
-            }
-            frontendReady = true;
-            if (backendReady && configReady)
-                windowEvents.emit("bothWindowsReady");
-        });
     }
+
+    mainWindow.on("closed", () => {
+        mainWindow = null;
+    });
+    mainWindow.webContents.on("did-finish-load", () => {
+        console.log("Main window finished loading.")
+        if (!mainWindow) {
+            throw new Error('"mainWindow" is not defined');
+        }
+        mainWindow.show();
+    });
 };
 
 const createBackWindow = () => {
@@ -278,9 +246,6 @@ const createBackWindow = () => {
         if (!backendWindow) {
             throw new Error('"backendWindow" is not defined');
         }
-        backendReady = true;
-        if (frontendReady && configReady) windowEvents.emit("bothWindowsReady");
-        log.debug("Backend window finished loading.");
     });
 };
 
@@ -290,9 +255,22 @@ const createMenu = () => {
 };
 
 const createTray = () => {
+    // no tray icon for mac
     if (os.platform() !== "darwin") {
+        // set tray icon first
+        if (os.platform() !== "win32") {
+            trayIcon = path.join(
+                __dirname,
+                "./mainWindow/images/icon_color_64x64.png"
+            );
+        } else {
+            console.log("attempting to set tray icon to " + path.join(__dirname, "./mainWindow/images/icon.ico"))
+            trayIcon = path.join(__dirname, "./mainWindow/images/icon.ico");
+        }
         tray = new Tray(trayIcon);
 
+
+        // then set the context menu
         tray.setContextMenu(
             Menu.buildFromTemplate([
                 {
@@ -315,16 +293,8 @@ const createTray = () => {
             ])
         );
 
+        // set events
         tray.on("click", () => showMainWindow());
-    }
-
-    if (os.platform() !== "win32") {
-        trayIcon = path.join(
-            __dirname,
-            "./mainWindow/images/icon_color_64x64.png"
-        );
-    } else {
-        trayIcon = path.join(__dirname, "./mainWindow/images/icon.ico");
     }
 };
 
@@ -340,7 +310,19 @@ const toggleCloseToTray = (state: boolean) => {
 
 // event function listeners
 const setEventListeners = () => {
+    // catch uncaught exceptions
+    process.on("uncaughtException", event => {
+        console.log(event);
+        // catch uncaught exceptions in the main process
+        dialog.showErrorBox(
+            "Uncaught Error",
+            "An unexpected error has occurred. Please report this error, and what you were doing to cause it."
+        );
+        process.exit(1);
+    });
+
     windowEvents.on("bothWindowsReady", () => {
+        console.log("Both windows are ready.");
         messageRelayer = new MessageRelayer(mainWindow, backendWindow);
         log.info(config);
         messageRelayer.sendToBackend("config", config);
@@ -403,8 +385,8 @@ app.on("activate", () => {
 });
 app.on("ready", () => {
     createContextMenu();
+    createTray();
     createMainWindow();
     createBackWindow();
-    createTray();
     createMenu();
 });
