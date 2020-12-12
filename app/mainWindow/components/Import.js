@@ -131,7 +131,6 @@ export default class Import extends Component<Props, State> {
         let currentPageNumber: number = this.evaluatePageNumber(activePage);
 
         if (currentPageNumber === 1) {
-
             const [
                 restoredWallet,
                 error
