@@ -157,7 +157,9 @@ export default class Receive extends Component<Props, State> {
                     >
                         <div className="columns">
                             <div className="column is-three-quarters">
-                                <form>
+                                <form
+                                    onSubmit={event => event.preventDefault()}
+                                >
                                     <div className="field">
                                         <label
                                             className={`label ${textColor}`}

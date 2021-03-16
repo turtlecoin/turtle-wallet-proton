@@ -621,7 +621,9 @@ export default class Home extends Component<Props, State> {
                             )}
                         {transactions !== undefined &&
                             transactions.length > displayedTransactionCount && (
-                                <form>
+                                <form
+                                    onSubmit={event => event.preventDefault()}
+                                >
                                     <div className="field">
                                         <div className="buttons">
                                             <button
