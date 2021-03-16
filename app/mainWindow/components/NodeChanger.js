@@ -166,7 +166,12 @@ export default class NodeChanger extends Component<Props, State> {
         const { textColor, linkColor } = uiType(darkMode);
         const { nodeChangeInProgress, connectionString, ssl } = this.state;
         return (
-            <form onSubmit={this.changeNode}>
+            <form
+                onSubmit={event => {
+                    event.preventDefault();
+                    this.changeNode();
+                }}
+            >
                 <p className={`has-text-weight-bold ${textColor}`}>
                     Remote Node (node:port)
                 </p>

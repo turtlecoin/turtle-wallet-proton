@@ -1,7 +1,7 @@
 {
     "name": "turtlecoin-wallet",
     "productName": "TurtleCoin Wallet",
-    "version": "3.4.6",
+    "version": "3.4.7",
     "description": "TurtleCoin wallet based on React, React Router, Webpack, and React Hot Loader",
     "scripts": {
         "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
