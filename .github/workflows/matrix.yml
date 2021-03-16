@@ -91,14 +91,3 @@ jobs:
           asset_path: ./release/${{ steps.before_deploy.outputs.file_name }}
           asset_name: ${{ steps.before_deploy.outputs.file_name }}
           asset_content_type: application/octet-stream
-
-      - name: Upload Additional Artifact to GH Release
-        if: github.event_name == 'release' && github.repository == 'turtlecoin/turtle-wallet-proton'
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./release/${{ steps.additional_deploy.outputs.deb_name }}
-          asset_name: ${{ steps.before_deploy.outputs.deb_name }}
-          asset_content_type: application/octet-stream
