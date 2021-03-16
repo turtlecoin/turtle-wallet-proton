@@ -70,6 +70,8 @@ export function formatLikeCurrency(x: number) {
     return parts.join(".");
 }
 
+export const extensionRegex = /.wallet$/;
+
 export function atomicToHuman(x: number, prettyPrint?: boolean) {
     if (prettyPrint || false) {
         return `${formatLikeCurrency(

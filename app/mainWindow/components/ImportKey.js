@@ -13,6 +13,8 @@ import { uiType } from "../utils/utils";
 import { eventEmitter, reInitWallet, config } from "../index";
 import configure from "../../configure";
 import iConfig from "../constants/config.json";
+import fs from "fs";
+import { extensionRegex } from "../utils/utils";
 
 type State = {
     darkMode: boolean,
@@ -184,6 +186,12 @@ export default class ImportKey extends Component<Props, State> {
             const response = await remote.dialog.showSaveDialog(null, options);
             if (response.canceled) {
                 return;
+            }
+            if (
+                !extensionRegex.exec(response.filePath) &&
+                !fs.existsSync(response.filePath + ".wallet")
+            ) {
+                response.filePath += ".wallet";
             }
             const saved = importedWallet.saveWalletToFile(
                 `${response.filePath}`,

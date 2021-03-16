@@ -14,6 +14,8 @@ import Redirector from "./Redirector";
 import { uiType } from "../utils/utils";
 import { backupToFile, eventEmitter, reInitWallet, config } from "../index";
 import iConfig from "../constants/config.json";
+import fs from "fs";
+import { extensionRegex } from "../utils/utils";
 
 type State = {
     darkMode: boolean,
@@ -205,6 +207,12 @@ export default class NewWallet extends Component<Props, State> {
                     );
                     if (response.canceled) {
                         return;
+                    }
+                    if (
+                        !extensionRegex.exec(response.filePath) &&
+                        !fs.existsSync(response.filePath + ".wallet")
+                    ) {
+                        response.filePath += ".wallet";
                     }
                     const saved = newWallet.saveWalletToFile(
                         `${response.filePath}`,

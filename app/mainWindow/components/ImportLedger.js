@@ -15,6 +15,8 @@ import Configure from "../../configure";
 import ReactLoading from "react-loading";
 import iConfig from "../constants/config.json";
 import request from "request-promise";
+import fs from "fs";
+import { extensionRegex } from "../utils/utils";
 
 const TransportNodeHID = require("@ledgerhq/hw-transport-node-hid").default;
 
@@ -217,6 +219,12 @@ export default class ImportLedger extends Component<Props, State> {
             const response = await remote.dialog.showSaveDialog(null, options);
             if (response.canceled) {
                 return;
+            }
+            if (
+                !extensionRegex.exec(response.filePath) &&
+                !fs.existsSync(response.filePath + ".wallet")
+            ) {
+                response.filePath += ".wallet";
             }
             const saved = importedWallet.saveWalletToFile(
                 `${response.filePath}`,
